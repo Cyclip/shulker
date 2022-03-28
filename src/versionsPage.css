@@ -1,0 +1,231 @@
+:root {
+    --bar-height: 40px;
+    --bar-height-enlarged: 70px;
+}
+
+.page.versions {
+    display: grid;
+    grid-template-columns: 300px calc(100% - 300px);
+    padding: 0;
+    padding-top: 30px;
+}
+
+.page.versions .versionList {
+    border-right: 1px solid rgba(53, 53, 53, 0.11);
+    border-top: 1px solid rgba(53, 53, 53, 0.11);
+    border-top-right-radius: 10px;
+    display: grid;
+    position: relative;
+    grid-template-rows: calc(100% - var(--bar-height)) var(--bar-height);
+}
+
+.bar {
+    box-sizing: border-box;
+    width: 100%;
+    height: var(--bar-height-enlarged);
+    grid-template-columns: var(--bar-height) calc(100% - var(--bar-height));
+    display: grid;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.bar.fixed {
+    height: var(--bar-height);
+    grid-template-columns: var(--bar-height) calc(100% - var(--bar-height));
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(102, 214, 102, 0.103);
+    border-top: 2px solid rgba(53, 53, 53, 0.178);
+}
+
+.bar.fixed:hover {
+    background-color: rgba(74, 223, 74, 0.212);
+}
+
+.bar .icon {
+    margin: auto;
+    width: 20px;
+    height: 20px;
+}
+
+.bar .label {
+    margin: 0 0;
+    margin-top: 9px;
+    font-family: "Rubik-Light";
+    font-weight: 100;
+    transition: 0.2s ease;
+}
+
+.bar.fixed .label {
+    margin-top: 7px;
+}
+
+.bar .trueVer {
+    color: rgba(255, 255, 255, 0.3);
+    padding-left: 30px;
+    font-size: 12px;
+    font-family: "Rubik-Light";
+    font-weight: 100;
+    transform: translateY(-5px);
+    transition: 0.2s ease;
+}
+
+.bar {
+    border-top: 1px solid rgba(53, 53, 53, 0.178);
+}
+
+.bar:first-child {
+    border-top: none;
+}
+
+.bar:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.01);
+}
+
+.bar.selected {
+    background-color: rgba(255, 255, 255, 0.06);
+    cursor: default;
+}
+
+.bar:not(.selected):hover {
+    background-color: rgba(172, 172, 255, 0.05);
+}
+
+.bar:not(.selected):hover .label {
+    margin-left: 5px;
+}
+
+.bar:not(.selected):hover .trueVer {
+    margin-left: 15px;
+}
+
+.page.versions .versionDetails {
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.editName {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    font-family: "Rubik-Medium";
+    letter-spacing: 2px;
+    padding: 5px 15px;
+    cursor: pointer;
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+.editName:hover {
+    background-color: #c2392f;
+    color: white;
+}
+
+.page.versions .versionDetails .name {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: left;
+    gap: 10px;
+}
+
+.page.versions .versionDetails h6 {
+    color: rgb(116, 116, 116);
+    font-weight: 100;
+}
+
+.page.versions .versionDetails .name h6 {
+    transform: translateY(28px);
+    color: rgb(75, 75, 75);
+}
+
+.versionInputs {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.input {
+    width: 100%;
+    height: 80px;
+    margin: 40px 0;
+}
+
+.input h3 {
+    font-size: 18px;
+    margin: 5px 0;
+    font-weight: 100;
+    color: rgb(197, 197, 197);
+}
+
+.input input {
+    width: 80%;
+}
+
+.input h6 {
+    margin: 10px 0;
+    font-size: 12px;
+}
+
+
+.saveChanges {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    height: 30px;
+    padding: 10px 30px;
+    background-color: #1f2833;
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    filter: brightness(100%);
+
+    cursor: pointer;
+}
+
+.saveChanges:hover {
+    filter: brightness(120%);
+}
+
+.saveChanges h4 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.editNamePopup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.editNamePopup .box {
+    background-color: var(--grey);
+    width: 600px;
+    height: 300px;
+    border-radius: 10px;
+}
+
+input.nameEdit {
+    font-size: 46px;
+    font-family: "Rubik-Medium";
+    width: 400px;
+}
+
+.flash {
+    animation: flashRed 1ms;
+}

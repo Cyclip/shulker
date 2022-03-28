@@ -1,38 +1,100 @@
+:root {
+    --black: #0b0c10;
+    --grey: #1f2833;
+    --white: #c5c6c7;
+    --aqua: #66fcf1;
+    --cyan: #45a29e;
+}
+
 .App {
-  text-align: center;
+    background-color: black;
+    background-image: url('bg.png');
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    padding-top: 30px;
+    box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 10px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+h1, h2 {
+    font-family: "Rubik-Medium";
 }
 
-.App-link {
-  color: #61dafb;
+h3, h4, h5, h6 {
+    font-family: "Rubik-Light";
+    margin-top: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input {
+    padding: 7px 10px;
+    font-family: "Rubik-Light";
+    outline: none;
+    font-size: 16px;
+
+    background-color: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    border-bottom: 2px solid rgba(148, 148, 148, 0.4);
+
+    transition: 0.2s ease;
+}
+
+input:hover {
+    border-bottom: 2px solid rgba(148, 148, 148, 0.9);
+}
+
+input:focus {
+    color: white;
+    border-bottom: 2px solid rgb(124, 166, 214);
+}
+
+.code {
+    background-color: #2b313aa9;
+    border-radius: 3px;
+    color: white;
+    font-family: "Lucida Console", "Courier New", monospace;
+    padding: 2px 5px;
+}
+
+.toFade {
+    transition: 0.4s ease;
+}
+
+.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.home {
+    position: fixed;
+    top: 5px;
+    right: 15px;
+    width: 24px;
+    height: 24px;
+    z-index: 100;
+    cursor: pointer;
+    padding: 5px;
 }

@@ -1,0 +1,86 @@
+:root {
+    --panel-size: 35vh;
+}
+
+h1 {
+    color: white;
+}
+
+.page.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page.main .title {
+    position: absolute;
+    top: 80px;
+    width: 100%;
+    text-align: center;
+}
+
+.page.main .panels {
+    width: 70vw;
+    height: var(--panel-size);
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.page.main .panels .panel {
+    width: 200px;
+    height: var(--panel-size);
+    border-radius: 25px;
+    flex-grow: 1;
+    text-align: center;
+    cursor: pointer;
+    background-color: rgb(235, 215, 215);
+    transition: 0.2s ease;
+}
+
+.page.main .panels .panel:nth-child(even) {
+    background-color: rgb(214, 196, 196);
+}
+
+.page.main .panels .panel .text {
+    color: black;
+    margin-bottom: 10px;
+    transition: 0.2s ease;
+}
+
+.page.main .panels .panel .panelIcon {
+    transition: 0.2s ease;
+    max-width: 100px;
+    max-height: 100px;
+    width: auto;
+    height: auto;
+}
+
+.panelIcon.inverted {
+    filter: invert(100%);
+}
+
+.page.main .panels .panel:hover {
+    background-color: #c2392f;
+}
+
+.page.main .panels .panel:hover .text {
+    color: white;
+}
+
+.page.main .panels .panel:hover .panelIcon {
+    filter: invert(100%);
+}
+
+.page.main .panels .panel:hover .panelIcon.inverted {
+    filter: invert(0%);
+}
+
+.page.main .panels .panel .panelIcon {
+    padding: 10px;
+    max-height: 80%;
+    min-width: 100px;
+    width: auto;
+    height: auto;
+}
+
