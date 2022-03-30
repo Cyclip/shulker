@@ -5,6 +5,7 @@ import './animations.css';
 import './App.css';
 import './mainPage.css';
 import './versionsPage.css';
+import loadingSvg from './loading.svg';
 import versionIcon from './version.svg';
 
 // icon imports
@@ -61,6 +62,11 @@ class App extends Component {
         this.setState({
             page: window
         });
+
+        if (window === "versions") {
+            this.updateProfileList();
+        }
+
         console.log(this.state);
     }
 
@@ -192,13 +198,17 @@ class App extends Component {
                         </div> */}
 
                         {
-                            this.state.profiles.map((item) => {
-                                <div className="bar">
+                            this.state.profiles.length > 0 
+                            ? this.state.profiles.map((item) => {
+                                return (<div className="bar">
                                     <ChipIcon className="icon"></ChipIcon>
-                                    <h5 className="label">{item["name"]}</h5>
+                                    <h5 className="label">{item["name"].length > 0 ? item["name"] : "Empty name"}</h5>
                                     <h6 className="trueVer">{item["version_id"]}</h6>
-                                </div>
+                                </div>);
                             })
+                            : <div className="loading-container">
+                                <img className="loading" src={loadingSvg}></img>
+                            </div>
                         }
                         
                     </div>
