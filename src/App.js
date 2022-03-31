@@ -1,5 +1,6 @@
 import { invoke } from '@tauri-apps/api/tauri'
 import React, { Component } from 'react';
+import './scrollbar.css';
 import './fonts.css';
 import './animations.css';
 import './App.css';
@@ -22,14 +23,31 @@ class App extends Component {
         super(props);
 
         this.state = {
+            // current page opened
             page: "versions",
+
+            // --=  VERSIONS PAGE =--
+            // if changes made
             versionChangesMade: false,
+
+            // flash for if they wanna leave but they made unsaved changes
             saveChangesVersionsFlash: false,
+
+            // currently editing version name?
             editingName: false,
+
+            // mapped profiles
             profiles: [],
+
+            // selected version rn
             selectedVersion: {
+                // id of the profile
                 id: "0c0b7b30094372140e1dcc4c90d24744",
+                
+                // formatted time
                 lastUsed: "5th March 2022",
+
+                // all info contained inside the profile (key as id)
                 contents: {
                     "created" : "2021-11-06T11:53:48.727Z",
                     "icon" : "Glazed_Terracotta_Light_Blue",
@@ -132,6 +150,41 @@ class App extends Component {
         });
     }
 
+    selectVersionID = (id) => {
+        invoke("get_profile", { id: id }).then((result) => {
+            console.log("result");
+            console.log(result);
+            this.setState({
+                selectedVersion: {
+                    // id of the profile
+                    id: id,
+                    
+                    // formatted time
+                    lastUsed: this.formatTime(result["last_used"]),
+    
+                    // all info contained inside the profile (key as id)
+                    contents: {
+                        "created": result["created"].slice(1, -1),
+                        "icon": result["icon"].slice(1, -1),
+                        "javaArgs": result["java_args"].slice(1, -1),
+                        "lastUsed": result["last_used"].slice(1, -1),
+                        "lastVersionId": result["last_version_id"].slice(1, -1),
+                        "name": result["name"].slice(1, -1),
+                        "type": result["type"].slice(1, -1)
+                    }
+                },
+
+            })
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+    formatTime = (timestr) => {
+        return timestr;
+    }
+
     render() {
         return <div className="App">
             <div className="home" onClick={() => this.home()}>
@@ -176,35 +229,20 @@ class App extends Component {
             <div className="page versions">
                 <div className="versionList">
                     <div className="listContainer">
-                        {/* <div className="bar">
-                            <ChipIcon className="icon"></ChipIcon>
-                            <h5 className="label">Cool thing</h5>
-                            <h6 className="trueVer">1.18.1</h6>
-                        </div>
-                        <div className="bar selected">
-                            <ChipIcon className="icon"></ChipIcon>
-                            <h5 className="label">Cool thing</h5>
-                            <h6 className="trueVer">1.18.1</h6>
-                        </div>
-                        <div className="bar">
-                            <ChipIcon className="icon"></ChipIcon>
-                            <h5 className="label">Cool thing</h5>
-                            <h6 className="trueVer">1.18.1</h6>
-                        </div>
-                        <div className="bar">
-                            <ChipIcon className="icon"></ChipIcon>
-                            <h5 className="label">Cool thing</h5>
-                            <h6 className="trueVer">1.18.1</h6>
-                        </div> */}
-
                         {
                             this.state.profiles.length > 0 
                             ? this.state.profiles.map((item) => {
-                                return (<div className="bar">
+                                return (
+                                <div 
+                                    className={"bar " + (
+                                        this.state.selectedVersion.id === item["id"] ? "selected" : ""
+                                    )}
+                                    onClick={() => {this.selectVersionID(item["id"]);}}>
                                     <ChipIcon className="icon"></ChipIcon>
-                                    <h5 className="label">{item["name"].length > 0 ? item["name"] : "Empty name"}</h5>
-                                    <h6 className="trueVer">{item["version_id"]}</h6>
-                                </div>);
+                                    <h5 className="label truncate">{item["name"].length > 0 ? item["name"] : item["version_id"]}</h5>
+                                    <h6 className="trueVer truncate">{item["version_id"]}</h6>
+                                </div>
+                                );
                             })
                             : <div className="loading-container">
                                 <img className="loading" src={loadingSvg}></img>
@@ -241,12 +279,19 @@ class App extends Component {
                     <div className="versionInputs">
                         <div className="input">
                             <h3>Java arguments</h3>
-                            <input onInput={(e) => {this.updateJavaArgsInput(e)}} defaultValue={this.state.selectedVersion.contents.javaArgs} spellCheck={false}></input>
+                            <input 
+                            onInput={(e) => {this.updateJavaArgsInput(e)}}
+                            defaultValue={this.state.selectedVersion.contents.javaArgs}
+                            value={this.state.selectedVersion.contents.javaArgs}
+                            spellCheck={false}></input>
                             <h6>The argument <span className="code">-Xmx?G</span> is the GB of ram to use</h6>
                         </div>
                         <div className="input">
                             <h3>Icon</h3>
-                            <input onInput={(e) => {this.updateIconInput(e)}} defaultValue={this.state.selectedVersion.contents.icon} spellCheck={false}></input>
+                            <input onInput={(e) => {this.updateIconInput(e)}}
+                            defaultValue={this.state.selectedVersion.contents.icon}
+                            value={this.state.selectedVersion.contents.icon}
+                            spellCheck={false}></input>
                             <h6>It is possible to use a URI (base64) image here</h6>
                         </div>
                         

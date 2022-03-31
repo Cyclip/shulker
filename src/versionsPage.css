@@ -17,6 +17,11 @@
     display: grid;
     position: relative;
     grid-template-rows: calc(100% - var(--bar-height)) var(--bar-height);
+    overflow: hidden;
+}
+
+.page.versions .versionList .listContainer {
+    overflow-y: auto;
 }
 
 .bar {
@@ -228,4 +233,11 @@ input.nameEdit {
 
 .flash {
     animation: flashRed 1ms;
+}
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 230px;
 }

@@ -5,6 +5,7 @@ use std::path::{
 };
 use serde_json::{
     Value,
+    map::Map,
 };
 use serde::{Serialize};
 
@@ -22,6 +23,79 @@ pub struct Profile {
     pub version_id: String,
 }
 
+/// ALl details pertaining a single profit
+/// Used when selecting a profile
+#[derive(Serialize)]
+pub struct DetailedProfile {
+    created: String,
+    icon: String,
+    java_args: String,
+    last_used: String,
+    last_version_id: String,
+    name: String,
+    r#type: String,
+}
+
+impl DetailedProfile {
+    pub fn new(path: PathBuf, id: String) -> Result<DetailedProfile, String> {
+        let profile_val = read_json(path);
+        let profile_obj = profile_val["profiles"][id].as_object().expect("cant find specific profile by id");
+
+        let created = match DetailedProfile::handle_index(&profile_obj, "created") {
+            Ok(x) => x,
+            Err(e) => {return Err(e)}
+        };
+
+        let icon = match DetailedProfile::handle_index(&profile_obj, "icon") {
+            Ok(x) => x,
+            Err(e) => {return Err(e)}
+        };
+
+        let java_args = match DetailedProfile::handle_index(&profile_obj, "javaArgs") {
+            Ok(x) => x,
+            Err(e) => {return Err(e)}
+        };
+
+        let last_used = match DetailedProfile::handle_index(&profile_obj, "lastUsed") {
+            Ok(x) => x,
+            Err(e) => {return Err(e)}
+        };
+
+        let last_version_id = match DetailedProfile::handle_index(&profile_obj, "lastVersionId") {
+            Ok(x) => x,
+            Err(e) => {return Err(e)}
+        };
+
+        let name = match DetailedProfile::handle_index(&profile_obj, "name") {
+            Ok(x) => x,
+            Err(e) => {return Err(e)}
+        };
+
+        let prof_type = match DetailedProfile::handle_index(&profile_obj, "type") {
+            Ok(x) => x,
+            Err(e) => {return Err(e)}
+        };
+
+        Ok(DetailedProfile {
+            created,
+            icon,
+            java_args,
+            last_used,
+            last_version_id,
+            name,
+            r#type: prof_type,
+        })
+    }
+
+    fn handle_index(profile_obj: &Map<String, Value>, index: &str) -> Result<String, String> {
+        if profile_obj.contains_key(index) {
+            Ok(profile_obj[index].to_string())
+        } else {
+            Err(format!("invalid profile, missing key {:?}", index))
+        }
+    }
+}
+
 impl Profiles {
     pub fn new(path: PathBuf) -> Profiles {
         let profile_val = read_json(path);
@@ -36,6 +110,7 @@ impl Profiles {
                     continue;
                 }
             };
+            println!("{} ({:?})", name, name);
 
             let version_id = match val["lastVersionId"].as_str() {
                 Some(x) => x,
@@ -44,6 +119,10 @@ impl Profiles {
                     continue;
                 }
             };
+
+            if version_id.starts_with("latest-") {
+                continue;
+            }
 
             profiles.push(Profile {
                 id: id.to_string(),

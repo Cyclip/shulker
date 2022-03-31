@@ -15,6 +15,7 @@ fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             commands::get_profiles,
+            commands::get_profile,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
