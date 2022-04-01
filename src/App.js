@@ -18,15 +18,15 @@ import {
     HomeIcon,
 } from '@heroicons/react/outline'
 
-class App extends Component {
+
+class VersionsPage extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            // current page opened
-            page: "versions",
+        // communicate with parents
+        window.versionComponent = this;
 
-            // --=  VERSIONS PAGE =--
+        this.state = {
             // if changes made
             versionChangesMade: false,
 
@@ -39,26 +39,35 @@ class App extends Component {
             // mapped profiles
             profiles: [],
 
+            // whether the user has selected a version
+            // if false, load the first profile
+            userSelected: false,
+
             // selected version rn
             selectedVersion: {
                 // id of the profile
-                id: "0c0b7b30094372140e1dcc4c90d24744",
+                id: "",
                 
                 // formatted time
-                lastUsed: "5th March 2022",
+                lastUsed: "",
 
                 // all info contained inside the profile (key as id)
                 contents: {
-                    "created" : "2021-11-06T11:53:48.727Z",
-                    "icon" : "Glazed_Terracotta_Light_Blue",
-                    "javaArgs" : "-Xmx4G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
-                    "lastUsed" : "2022-03-05T13:56:12.353Z",
-                    "lastVersionId" : "1.8.9-OptiFine_HD_U_M5",
-                    "name" : "Optifine",
-                    "type" : "custom"
+                    "created" : "",
+                    "icon" : "",
+                    "javaArgs" : "",
+                    "lastUsed" : "",
+                    "lastVersionId" : "",
+                    "name" : "",
+                    "type" : ""
                 }
             }
         };
+    }
+
+    componentDidMount() {
+        // set timer interval to update profile list
+        this.interval = setInterval(() => this.updateProfileList(false), 1000);
     }
 
     updateProfileList = () => {
@@ -67,6 +76,11 @@ class App extends Component {
             this.setState({
                 profiles: result["profiles"]
             });
+
+            if (!this.state.userSelected) {
+                // empty id ⇒ nothing selected
+                this.selectVersionID(result[0]["id"], false);
+            }
         });
     }
 
@@ -74,17 +88,6 @@ class App extends Component {
         this.setState({
             versionChangesMade: val
         });
-    }
-
-    openSetting = (window) => {
-        this.setState({
-            page: window
-        });
-
-        if (window === "versions") {
-            this.updateProfileList();
-        }
-
         console.log(this.state);
     }
 
@@ -136,21 +139,7 @@ class App extends Component {
         }
     }
 
-    home = () => {
-        this.updateProfileList();
-        if (this.state.versionChangesMade) {
-            this.setState({
-                saveChangesVersionsFlash: true,
-            });
-            return;
-        }
-
-        this.setState({
-            page: "main",
-        });
-    }
-
-    selectVersionID = (id) => {
+    selectVersionID = (id, isUserAction) => {
         invoke("get_profile", { id: id }).then((result) => {
             console.log("result");
             console.log(result);
@@ -173,8 +162,8 @@ class App extends Component {
                         "type": result["type"].slice(1, -1)
                     }
                 },
-
-            })
+                userSelected: this.state.userSelected ? true : isUserAction
+            });
         })
         .catch((error) => {
             console.error(error);
@@ -185,47 +174,12 @@ class App extends Component {
         return timestr;
     }
 
-    render() {
-        return <div className="App">
-            <div className="home" onClick={() => this.home()}>
-                <HomeIcon/>
-            </div>
-            {
-                this.state.page === "main" &&
-                <div className="page main">
-                    <h1 className="title">Select setting</h1>
-                    <div className="panels">
-                        <div className="panel" onClick={() => this.openSetting("versions")}>
-                            <img src={versionIcon} className="panelIcon"></img>
-                            <h2 className="text">
-                                Versions
-                            </h2>
-                            <h6 className="text">
-                                Manage your versions and its settings
-                            </h6>
-                        </div>
-                        <div className="panel">
-                            <CubeTransparentIcon className="panelIcon inverted"></CubeTransparentIcon>
-                            <h2 className="text">
-                                Resource packs
-                            </h2>
-                            <h6 className="text">
-                                Customise textures and manage shaders
-                            </h6>
-                        </div>
-                        <div className="panel">
-                            <CodeIcon className="panelIcon inverted"></CodeIcon>
-                            <h2 className="text">
-                                Addons
-                            </h2>
-                            <h6 className="text">
-                                Manage mods for Minecraft
-                            </h6>
-                        </div>
-                    </div>
-                </div>
-            }
+    test() {
+        console.log("pp");
+    }
 
+    render() {        
+        return (
             <div className="page versions">
                 <div className="versionList">
                     <div className="listContainer">
@@ -237,7 +191,7 @@ class App extends Component {
                                     className={"bar " + (
                                         this.state.selectedVersion.id === item["id"] ? "selected" : ""
                                     )}
-                                    onClick={() => {this.selectVersionID(item["id"]);}}>
+                                    onClick={() => {this.selectVersionID(item["id"], true);}}>
                                     <ChipIcon className="icon"></ChipIcon>
                                     <h5 className="label truncate">{item["name"].length > 0 ? item["name"] : item["version_id"]}</h5>
                                     <h6 className="trueVer truncate">{item["version_id"]}</h6>
@@ -310,6 +264,94 @@ class App extends Component {
                     </div>
                 </div>
             </div>
+        )
+    }
+}
+
+
+class App extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            // current page opened
+            page: "main",
+        };
+    }
+
+    openSetting = (window) => {
+        this.setState({
+            page: window
+        });
+
+        switch (window) {
+            case "main":
+                break;
+            case "versions":
+                window.versionComponent.updateProfileList(true);
+                break;
+        }
+    }
+
+    home = () => {
+        if (this.state.versionChangesMade) {
+            this.setState({
+                saveChangesVersionsFlash: true,
+            });
+            return;
+        }
+
+        this.setState({
+            page: "main",
+        });
+    }
+
+    render() {
+        return <div className="App">
+            <div className="home" onClick={() => this.home()}>
+                <HomeIcon/>
+            </div>
+            
+            {
+                this.state.page === "main" &&
+                <div className="page main">
+                    <h1 className="title">Select setting</h1>
+                    <div className="panels">
+                        <div className="panel" onClick={() => this.openSetting("versions")}>
+                            <img src={versionIcon} className="panelIcon"></img>
+                            <h2 className="text">
+                                Versions
+                            </h2>
+                            <h6 className="text">
+                                Manage your versions and its settings
+                            </h6>
+                        </div>
+                        <div className="panel">
+                            <CubeTransparentIcon className="panelIcon inverted"></CubeTransparentIcon>
+                            <h2 className="text">
+                                Resource packs
+                            </h2>
+                            <h6 className="text">
+                                Customise textures and manage shaders
+                            </h6>
+                        </div>
+                        <div className="panel">
+                            <CodeIcon className="panelIcon inverted"></CodeIcon>
+                            <h2 className="text">
+                                Addons
+                            </h2>
+                            <h6 className="text">
+                                Manage mods for Minecraft
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            {
+                this.state.page === "versions" &&
+                <VersionsPage/>
+            }
         </div>
         //{
         //    this.state.page === "main" &&
