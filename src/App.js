@@ -72,7 +72,6 @@ class VersionsPage extends Component {
 
     updateProfileList = () => {
         invoke('get_profiles').then((result) => {
-            console.log(result);
             this.setState({
                 profiles: result["profiles"]
             });
@@ -125,6 +124,24 @@ class VersionsPage extends Component {
 
     saveVersions = () => {
         if (this.state.versionChangesMade === true) {
+            invoke(
+                "save_profile",
+                {
+                    id: this.state.selectedVersion.id,
+                    profile: {
+                        created: this.state.selectedVersion.contents.created,
+                        icon: this.state.selectedVersion.contents.icon,
+                        java_args: this.state.selectedVersion.contents.javaArgs,
+                        last_used: this.state.selectedVersion.contents.lastUsed,
+                        last_version_id: this.state.selectedVersion.contents.lastVersionId,
+                        name: this.state.selectedVersion.contents.name,
+                        prof_type: this.state.selectedVersion.contents.type,
+                    }
+                }
+            )
+                .then(() => {console.log("saved");})
+                .catch((err) => {return console.error(err)})
+
             this.setState({
                 versionChangesMade: false
             });
@@ -159,7 +176,7 @@ class VersionsPage extends Component {
                         "lastUsed": result["last_used"].slice(1, -1),
                         "lastVersionId": result["last_version_id"].slice(1, -1),
                         "name": result["name"].slice(1, -1),
-                        "type": result["type"].slice(1, -1)
+                        "type": result["prof_type"].slice(1, -1)
                     }
                 },
                 userSelected: this.state.userSelected ? true : isUserAction

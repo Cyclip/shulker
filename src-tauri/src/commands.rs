@@ -27,3 +27,13 @@ pub fn get_profile(id: String) -> Result<DetailedProfile, String> {
 
     DetailedProfile::new(launcher_profiles_path, id)
 }
+
+/// Save profile data
+#[tauri::command]
+pub fn save_profile(id: String, profile: DetailedProfile) -> Result<(), String> {
+    let launcher_profiles_path = paths::minecraft_path(
+        Some(PathBuf::from("launcher_profiles.json"))
+    );
+    
+    profile.save(id, launcher_profiles_path)
+}

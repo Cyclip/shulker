@@ -16,6 +16,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             commands::get_profiles,
             commands::get_profile,
+            commands::save_profile,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
