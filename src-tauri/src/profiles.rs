@@ -107,6 +107,7 @@ impl DetailedProfile {
         // serialize into json to path
         let file = match fs::OpenOptions::new()
             .write(true)
+            .truncate(true)
             .open(path) {
                 Ok(x) => x,
                 Err(e) => {
