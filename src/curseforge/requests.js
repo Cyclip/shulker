@@ -15,7 +15,12 @@ const HEADERS = {
 
 const BASE = "https://api.curseforge.com";
 
-// GET request to curseforge
+/**
+ * It takes a path and a params object, and returns a JSON object from the CurseForge API
+ * @param path - The path to the API endpoint.
+ * @param params - {
+ * @returns A function that returns a promise.
+ */
 export default function getCurseForge(path, params) {
     let params = stringFromParams(params);
     let a = await fetch(BASE + path + params,
@@ -30,6 +35,11 @@ export default function getCurseForge(path, params) {
     return a;
 }
 
+/**
+ * It takes an object and returns a string of the form "key1=value1&key2=value2&key3=value3"
+ * @param params - {
+ * @returns A string of the form "key1=value1&key2=value2&key3=value3"
+ */
 function stringFromParams(params) {
     let s = "";
 
