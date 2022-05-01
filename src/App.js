@@ -16,6 +16,7 @@ import {
 
 // pages
 import VersionsPage from './versionsPage/index.js';
+import ResourcesPage from './resourcesPage/index.js';
 
 class App extends Component {
     constructor(props) {
@@ -74,7 +75,7 @@ class App extends Component {
                                 Manage your versions and its settings
                             </h6>
                         </div>
-                        <div className="panel">
+                        <div className="panel" onClick={() => this.openSetting("resources")}>
                             <CubeTransparentIcon className="panelIcon inverted"></CubeTransparentIcon>
                             <h2 className="text">
                                 Resource packs
@@ -100,11 +101,12 @@ class App extends Component {
                 this.state.page === "versions" &&
                 <VersionsPage/>
             }
+
+            {
+                this.state.page === "resources" &&
+                <ResourcesPage/>
+            }
         </div>
-        //{
-        //    this.state.page === "main" &&
-         //   
-        //}
       ;
     }
 }

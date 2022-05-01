@@ -1,0 +1,1 @@
+pub const PREFERENCES_DEFAULT: &str = r#"{"CURSEFORGE_API_KEY": "x"}"#;

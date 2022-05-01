@@ -1,3 +1,5 @@
+use crate::data;
+
 use crate::profiles::{
     Profiles,
     DetailedProfile,
@@ -36,4 +38,14 @@ pub fn save_profile(id: String, profile: DetailedProfile) -> Result<(), String> 
     );
     
     profile.save(id, launcher_profiles_path)
+}
+
+#[tauri::command]
+pub fn get_curseforge_api_key() -> String {
+    match data::read_preferences()["CURSEFORGE_API_KEY"].as_str() {
+        Some(x) => x.to_string(),
+        None => {
+            panic!("missing key 'CURSEFORGE_API_KEY' in preferences");
+        }
+    }
 }

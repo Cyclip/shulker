@@ -10,13 +10,32 @@ extern crate directories;
 mod paths;
 mod profiles;
 mod commands;
+mod constants;
+mod data;
+
+use std::fs::File;
+use std::io::Write;
+
+fn setup_files() {
+    let preferences = data::data_path("preferences.json");
+
+    if !preferences.exists() {
+        // create new preferences file
+        let mut f = File::create(preferences).expect("failed to create preferences file");
+        write!(f, "{}", constants::PREFERENCES_DEFAULT).expect("failed to write to preferences file");
+    }
+}
 
 fn main() {
+    // setup initial files (if needed)
+    setup_files();
+
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             commands::get_profiles,
             commands::get_profile,
             commands::save_profile,
+            commands::get_curseforge_api_key,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
