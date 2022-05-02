@@ -22,12 +22,12 @@ const BASE = "https://api.curseforge.com";
  * @param params - {
  * @returns A function that returns a promise.
  */
-export default function getCurseForge(path, params) {
-    let params = stringFromParams(params);
-    let a = await fetch(BASE + path + params,
+export async function getCurseForge(path, params) {
+    let paramsStr = stringFromParams(params);
+    let a = await fetch(BASE + path + paramsStr,
         {
             method: 'GET',
-            headers: headers
+            headers: HEADERS
         }
     ).then(function(res) {
         return res.json();
@@ -43,7 +43,7 @@ export default function getCurseForge(path, params) {
  * @param n - the current node
  * @returns An array of objects.
  */
-export default function getChildrenCategories(cats, n) {
+export function getChildrenCategories(cats, n) {
     let children = [];
     
     for (const cat of cats['data']) {

@@ -97,6 +97,11 @@ input:focus {
     z-index: 100;
     cursor: pointer;
     padding: 5px;
+    transition: 0.2s ease;
+}
+
+.home:hover {
+    filter: drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.35));
 }
 
 .loading-container {
