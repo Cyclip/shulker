@@ -17,6 +17,7 @@ const BASE = "https://api.curseforge.com";
 
 /**
  * It takes a path and a params object, and returns a JSON object from the CurseForge API
+ * https://docs.curseforge.com/
  * @param path - The path to the API endpoint.
  * @param params - {
  * @returns A function that returns a promise.
@@ -33,6 +34,25 @@ export default function getCurseForge(path, params) {
     });
 
     return a;
+}
+
+/**
+ * For each category in the array of categories, if the parentCategoryId of the category is equal to
+ * the parentCategoryId of the node, then push the category to the children array.
+ * @param cats - the array of categories
+ * @param n - the current node
+ * @returns An array of objects.
+ */
+export default function getChildrenCategories(cats, n) {
+    let children = [];
+    
+    for (const cat of cats['data']) {
+        if (cat['parentCategoryId'] == n) {
+            children.push(cat);
+        }
+    }
+
+    return children;
 }
 
 /**

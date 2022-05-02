@@ -4,7 +4,7 @@ import '../scrollbar.css';
 import '../fonts.css';
 import '../animations.css';
 import '../App.css';
-import './versionsPage.css';
+import './style.css';
 import loadingSvg from '../loading.svg';
 
 // icon imports

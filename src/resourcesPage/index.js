@@ -4,13 +4,17 @@ import '../scrollbar.css';
 import '../fonts.css';
 import '../animations.css';
 import '../App.css';
+import '../style.css';
+import {
+    getChildrenCategories
+} from '../curseforge/categories.js';
 
-export default class VersionsPage extends Component {
+export default class ResourcesPage extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-
+            categories: [],
         };
     }
 
