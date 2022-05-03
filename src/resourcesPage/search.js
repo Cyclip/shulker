@@ -91,7 +91,7 @@ export class SearchTab extends Component {
         return (
             <div className='search no-select'>
                 <div className='categories'>
-                    <h2>Categories</h2>
+                    <h3>Categories</h3>
                     <CategoryList 
                         categories={this.state.categories}
                         selected={this.state.selectedCategoryId}
@@ -100,7 +100,11 @@ export class SearchTab extends Component {
                     />
                 </div>
                 <div className='explorer'>
-                    
+                    <div className='searchbar'>
+                        <input className='searchbarItem'></input>
+                        <button className='searchbarItem2'>pp</button>
+                        <buton className='searchbarItem2'>pppp</buton>
+                    </div>
                 </div>
             </div>
         )
