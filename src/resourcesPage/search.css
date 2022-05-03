@@ -22,4 +22,51 @@
     box-sizing: border-box;
     padding: 20px 0;
     text-align: center;
+    overflow-y: auto;
+}
+
+.categories h2 {
+    margin-bottom: 15px;
+}
+
+.category {
+    position: relative;
+    display: flex;
+    justify-content: left;
+    gap: 10px;
+    padding: 15px 20px;
+    text-align: center;
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.category .thumbnail {
+    width: 25px;
+    height: 25px;
+}
+
+.category .name {
+    font-size: 20px;
+    margin: 0;
+}
+
+.category .sep {
+    position: absolute;
+    bottom: 0;
+    width: 75%;
+    left: 30%;
+    -webkit-transform: translateX(-25%);
+    transform: translateX(-25%);
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.category.selected {
+    background-color: rgba(255, 255, 255, 0.06);
+    padding: 15px 32px;
+}
+
+.category:not(.selected):hover {
+    background-color: rgba(172, 172, 255, 0.05);
 }

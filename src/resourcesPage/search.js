@@ -16,7 +16,9 @@ function Category(props) {
 
     return (
         <div className='category'>
-            <h1>{value.id}</h1>
+            <img src={value.iconUrl} className='thumbnail'/>
+            <h4 className='name'>{value.name}</h4>
+            <div className='sep'></div>
         </div>
     );
 }
@@ -33,6 +35,11 @@ class CategoryList extends Component {
 
         return (
             <div className='categoriesContainer'>
+                <div className='category selected'>
+                    <img src="https://media.forgecdn.net/avatars/6/75/635351598555753321.png" className='thumbnail'/>
+                    <h4 className='name'>weee</h4>
+                    <div className='sep'></div>
+                </div>
                 {listItems}
             </div>
         );
