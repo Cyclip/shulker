@@ -3,7 +3,7 @@
 import { invoke } from '@tauri-apps/api/tauri'
 
 const API_KEY = invoke('get_curseforge_api_key')
-    .then((data) => {data})
+    .then((data) => {const API_KEY = data;})
     .catch((err) => {
         console.error(`couldnt retrieve curseforge api key: ${err}`);
 });

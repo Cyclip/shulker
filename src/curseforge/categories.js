@@ -11,10 +11,17 @@ import {
 export async function getCategories() {
     let cats = await getCurseForge("/v1/categories", {"gameId": 432});
 
+    console.log("got from curseforge", cats);
+
     // resource pack ID: 12
     // find children of this
     let resourcePackCats = getChildrenCategories(cats, 12);
-    return resourcePackCats.sort(function(first, second) {
+    console.log("kids", resourcePackCats);
+    resourcePackCats.sort(function(first, second) {
         return second.id - first.id;
-    });
+    })
+
+    console.log("kids sorted", resourcePackCats);
+
+    return resourcePackCats;
 }

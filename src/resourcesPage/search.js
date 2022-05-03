@@ -10,17 +10,53 @@ import {
     getCategories
 } from '../curseforge/categories.js';
 
+function Category(props) {
+    const value = props.categoryData;
+    console.log("Category", value);
+
+    return (
+        <div className='category'>
+            <h1>{value.id}</h1>
+        </div>
+    );
+}
+
+class CategoryList extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        const listItems = this.props.categories.map((category) => 
+            <Category categoryData={category}/>
+        );
+
+        return (
+            <div className='categoriesContainer'>
+                {listItems}
+            </div>
+        );
+    }
+}
+
 export class SearchTab extends Component {
     constructor(props) {
         super(props);
 
-        let cats = getCategories();
-        console.log(cats);
-
         this.state = {
             // all categories to be mapped out
-            categories: cats,
+            categories: [],
         }
+    }
+
+    async componentDidMount() {
+        let categories = await getCategories();
+
+        this.setState({
+            categories: categories,
+        });
+        
+        console.log("cat", categories);
     }
 
     render() {
@@ -28,6 +64,7 @@ export class SearchTab extends Component {
             <div className='search'>
                 <div className='categories'>
                     <h2>Categories</h2>
+                    <CategoryList categories={this.state.categories}/>
                 </div>
                 <div className='explorer'>
                     
