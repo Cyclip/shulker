@@ -3,7 +3,7 @@
 import { invoke } from '@tauri-apps/api/tauri'
 
 const API_KEY = invoke('get_curseforge_api_key')
-    .then((data) => {data.text()})
+    .then((data) => {data})
     .catch((err) => {
         console.error(`couldnt retrieve curseforge api key: ${err}`);
 });
@@ -23,13 +23,17 @@ const BASE = "https://api.curseforge.com";
  * @returns A function that returns a promise.
  */
 export async function getCurseForge(path, params) {
+    // console.log("getCurseforge", path, params)
     let paramsStr = stringFromParams(params);
+    // console.log("final path", BASE + path + paramsStr);
+    // console.log("headers", HEADERS);
     let a = await fetch(BASE + path + paramsStr,
         {
             method: 'GET',
-            headers: HEADERS
+            headers: HEADERS,
         }
     ).then(function(res) {
+        // console.log(res);
         return res.json();
     });
 
@@ -52,6 +56,8 @@ export function getChildrenCategories(cats, n) {
         }
     }
 
+    console.log(children);
+
     return children;
 }
 
@@ -61,13 +67,13 @@ export function getChildrenCategories(cats, n) {
  * @returns A string of the form "key1=value1&key2=value2&key3=value3"
  */
 function stringFromParams(params) {
-    let s = "";
+    let s = "?";
 
     for (const [key, value] of Object.entries(params)) {
         s += `${key}=${value}&`;
     };
 
     // remove last char '&'
-    s = s.splice(0, -1);
+    s = s.substring(0, s.length - 1);
     return s;
 }

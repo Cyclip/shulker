@@ -8,17 +8,12 @@ import {
  * category, and then it sorts them by ID
  * @returns An array of objects.
  */
-export default function getCategories() {
-    let cats = getCurseForge(
-        "/v1/categories",
-        {
-            "gameId": 432,
-        },
-    );
+export async function getCategories() {
+    let cats = await getCurseForge("/v1/categories", {"gameId": 432});
 
     // resource pack ID: 12
     // find children of this
-    let resourcePackCats = getChildrenCategories(12);
+    let resourcePackCats = getChildrenCategories(cats, 12);
     return resourcePackCats.sort(function(first, second) {
         return second.id - first.id;
     });

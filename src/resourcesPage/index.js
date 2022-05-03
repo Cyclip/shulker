@@ -5,16 +5,15 @@ import '../fonts.css';
 import '../animations.css';
 import '../App.css';
 import './style.css';
-import {
-    getChildrenCategories
-} from '../curseforge/categories.js';
+
+import {SearchTab} from './search.js';
 
 export default class ResourcesPage extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            activeTab: "installed",
+            activeTab: "search",
         };
     }
 
@@ -42,6 +41,13 @@ export default class ResourcesPage extends Component {
                         Search
                         <div className='line'></div>
                     </div>
+                </div>
+
+                <div className='frame'>
+                    {
+                        this.state.activeTab === "search" &&
+                        <SearchTab/>
+                    }
                 </div>
             </div>
         )
