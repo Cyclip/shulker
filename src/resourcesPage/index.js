@@ -26,7 +26,7 @@ export default class ResourcesPage extends Component {
     render() {
         return (
             <div className='page resources'>
-                <div className='tabs'>
+                <div className='tabs no-select'>
                     <div className={"tab " + (
                         this.state.activeTab === "installed" ? "active" : ""
                     )}

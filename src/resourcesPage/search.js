@@ -10,42 +10,49 @@ import {
     getCategories
 } from '../curseforge/categories.js';
 
-function Category(props) {
-    const value = props.categoryData;
-    console.log("Category", value);
-
-    return (
-        <div className='category'>
-            <img src={value.iconUrl} className='thumbnail'/>
-            <h4 className='name'>{value.name}</h4>
-            <div className='sep'></div>
-        </div>
-    );
-}
-
+/* It's a React component that renders a list of Category components. */
 class CategoryList extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            selectedId: props.selected,
+            selectCallback: props.selectCallback,
+        }
+    }
+
+    update = (newId) => {
+        console.log("updating id from", this.state.selectedId, "to", newId);
+        this.setState({
+            selectedId: newId,
+        });
+    }
+
+    select = (id) => {
+        console.log("calling callback for", id);
+        this.state.selectCallback(id);
     }
 
     render() {
         const listItems = this.props.categories.map((category) => 
-            <Category categoryData={category}/>
+            <div className={"category " + (
+                this.state.selectedId === category.id ? "selected" : ""
+            )} onClick={() => this.select(category.id)} key={category.id}>
+                <img src={category.iconUrl} className='thumbnail'/>
+                <h4 className='name'>{category.name}</h4>
+                <div className='sep'></div>
+            </div>
         );
 
         return (
             <div className='categoriesContainer'>
-                <div className='category selected'>
-                    <img src="https://media.forgecdn.net/avatars/6/75/635351598555753321.png" className='thumbnail'/>
-                    <h4 className='name'>weee</h4>
-                    <div className='sep'></div>
-                </div>
                 {listItems}
             </div>
         );
     }
 }
 
+// Search tab
 export class SearchTab extends Component {
     constructor(props) {
         super(props);
@@ -53,25 +60,44 @@ export class SearchTab extends Component {
         this.state = {
             // all categories to be mapped out
             categories: [],
+
+            // selected category id
+            selectedCategoryId: 5244,
         }
     }
 
+    // When component mounts/loads
     async componentDidMount() {
         let categories = await getCategories();
 
         this.setState({
             categories: categories,
+            selectedCategoryId: categories[0].id,
         });
         
         console.log("cat", categories);
     }
 
+    // Callback from single category
+    selectCallback = (id) => {
+        console.log("recieved select callback from", this.state.selectedCategoryId, "to", id);
+        this.setState({
+            selectedCategoryId: id,
+        });
+        this.categoryList.update(id);
+    }
+
     render() {
         return (
-            <div className='search'>
+            <div className='search no-select'>
                 <div className='categories'>
                     <h2>Categories</h2>
-                    <CategoryList categories={this.state.categories}/>
+                    <CategoryList 
+                        categories={this.state.categories}
+                        selected={this.state.selectedCategoryId}
+                        selectCallback={this.selectCallback}
+                        ref={(ip) => this.categoryList = ip}
+                    />
                 </div>
                 <div className='explorer'>
                     
