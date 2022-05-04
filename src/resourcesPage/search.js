@@ -170,7 +170,7 @@ export class SearchTab extends Component {
         const SearchBar = (
             <input
                 className='searchbarItemSmall'
-                placeholder='Search resource pack..'
+                placeholder='Search resource packs..'
                 value={this.state.searchQuery}
                 onInput={(e) => this.updateSearchQuery(e)}
             ></input>
@@ -191,15 +191,15 @@ export class SearchTab extends Component {
                 <div className='explorer'>
                     <div className='searchbar'>
                         {SearchBar}
-                        <button className='searchbarItemBig searchButton'>
-                            <SearchIcon className='searchIcon'/>
-                        </button>
                         <SelectVersion
                             versions={this.state.versions}
                             selected={this.state.selectedVersion}
                             selectCallback={this.versionSelectCallback}
                             ref={(ip) => this.versionListRef = ip}
                         />
+                        <button className='searchbarItemBig searchButton'>
+                            <SearchIcon className='searchIcon'/>
+                        </button>
                     </div>
                 </div>
             </div>

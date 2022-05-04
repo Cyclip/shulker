@@ -43,7 +43,7 @@ h3, h4, h5, h6 {
     margin-top: 5px;
 }
 
-input {
+input, select {
     padding: 7px 10px;
     font-family: "Rubik-Light";
     outline: none;
@@ -57,13 +57,29 @@ input {
     transition: 0.2s ease;
 }
 
-input:hover {
+input:hover, select:hover {
     border-bottom: 2px solid rgba(148, 148, 148, 0.9);
 }
 
-input:focus {
+input:focus, select:focus {
     color: white;
     border-bottom: 2px solid rgb(124, 166, 214);
+}
+
+select {
+    cursor: pointer;
+    color: white;
+}
+
+select option {
+    background: #141414;
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+}
+
+select option[value="Any version"] {
+    color: rgb(206, 243, 191);
 }
 
 .code {
