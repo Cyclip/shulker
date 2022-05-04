@@ -10,6 +10,9 @@ import {
     getCategories
 } from '../curseforge/categories.js';
 
+import { SearchIcon } from '@heroicons/react/solid'
+
+
 /* It's a React component that renders a list of Category components. */
 class CategoryList extends Component {
     constructor(props) {
@@ -63,6 +66,9 @@ export class SearchTab extends Component {
 
             // selected category id
             selectedCategoryId: 5244,
+
+            // Search bar query
+            searchQuery: "",
         }
     }
 
@@ -87,8 +93,25 @@ export class SearchTab extends Component {
         this.categoryList.update(id);
     }
 
+    updateSearchQuery = (e) => {
+        const val = e.target.value;
+
+        this.setState({
+            searchQuery: val
+        });
+    }
+
     render() {
+        const SearchBar = (
+            <input
+                className='searchbarItemSmall'
+                placeholder='Search resource pack..'
+                value={this.state.searchQuery}
+                onInput={(e) => this.updateSearchQuery(e)}
+            ></input>
+        );
         return (
+
             <div className='search no-select'>
                 <div className='categories'>
                     <h3>Categories</h3>
@@ -101,9 +124,11 @@ export class SearchTab extends Component {
                 </div>
                 <div className='explorer'>
                     <div className='searchbar'>
-                        <input className='searchbarItem'></input>
-                        <button className='searchbarItem2'>pp</button>
-                        <buton className='searchbarItem2'>pppp</buton>
+                        {SearchBar}
+                        <button className='searchbarItemBig searchButton'>
+                            <SearchIcon className='searchIcon'/>
+                        </button>
+                        <button className='searchbarItemBig'>pppp</button>
                     </div>
                 </div>
             </div>
