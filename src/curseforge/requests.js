@@ -10,8 +10,10 @@ import { invoke } from '@tauri-apps/api/tauri'
  * @returns A function that returns a promise.
  */
 export async function getCurseForge(path, params) {
-    const API_KEY = invoke('get_curseforge_api_key')
-        .then((data) => {const API_KEY = data;})
+    const API_KEY = await invoke('get_curseforge_api_key')
+        .then(function(data) {
+            return data;
+        })
         .catch((err) => {
             console.error(`couldnt retrieve curseforge api key: ${err}`);
     });
@@ -25,14 +27,20 @@ export async function getCurseForge(path, params) {
 
     let paramsStr = stringFromParams(params);
     let finalPath = BASE + path + paramsStr;
+
+    console.log(`Calling ${finalPath}`)
+
     let a = await fetch(finalPath,
         {
             method: 'GET',
             headers: HEADERS,
         }
-    ).then(function(res) {
-        console.log(res);
-        return res.json();
+    ).then(function(resp) {
+        console.log(`response from ${finalPath}`);
+        if (!resp.ok) {
+            throw `Server error: [${resp.status}] [${resp.statusText}] [${resp.url}]`;
+        }
+        return resp.json();
     })
     .catch((err) => {
         console.error(`error fetching from ${finalPath}: ${err}`);

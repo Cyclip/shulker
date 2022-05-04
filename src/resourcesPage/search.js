@@ -8,7 +8,8 @@ import './search.css';
 
 import {getCategories} from '../curseforge/categories.js';
 import {
-    getVersions
+    getVersions,
+    getResourcePacks
 } from '../curseforge/search.js';
 
 import { SearchIcon } from '@heroicons/react/solid'
@@ -110,26 +111,55 @@ export class SearchTab extends Component {
             versions: [],
 
             // selected category id
-            selectedCategoryId: 5244,
+            selectedCategoryId: 0,
 
             // Search bar query
             searchQuery: "",
 
             // Current selected search version filter
             selectedVersion: "",
+
+            /* resource pack listings */
+            // all listed resource packs
+            resourcePacks: [],
         }
     }
 
     
     // When component mounts/loads
     async componentDidMount() {
+        this.loadCategories();
+        this.loadVersions();
+        this.loadResourcePacks();
+    }
+
+    // Load resource packs into state based on filters
+    // (selectedCategoryId, searchQuery, selectedVersion)
+    loadResourcePacks = async() => {
+        let packs = await getResourcePacks(
+            this.state.selectedCategoryId,
+            this.state.searchQuery,
+            this.state.selectedVersion,
+        );
+
+        console.log("packs", packs);
+    }
+
+    // Load categories into state
+    loadCategories = async() => {
         let categories = await getCategories();
+        this.setState({
+            categories: categories,
+            selectedCategoryId: categories[0].id,
+        });
+    }
+
+    // Load versions into state
+    loadVersions = async() => {
         let versions = await getVersions();
 
         this.setState({
-            categories: categories,
             versions: versions,
-            selectedCategoryId: categories[0].id,
             selectedVersion: "any",
         });
     }
@@ -200,6 +230,10 @@ export class SearchTab extends Component {
                         <button className='searchbarItemBig searchButton'>
                             <SearchIcon className='searchIcon'/>
                         </button>
+                    </div>
+
+                    <div className='resourcePacks'>
+                        
                     </div>
                 </div>
             </div>

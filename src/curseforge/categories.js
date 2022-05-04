@@ -15,8 +15,18 @@ export async function getCategories() {
     // find children of this
     let resourcePackCats = getChildrenCategories(cats, 12);
     resourcePackCats.sort(function(first, second) {
-        return second.id - first.id;
+        return first.id - second.id;
     })
+    let concatCats = [{
+        "id": 0,
+        "gameId": 432,
+        "name": "All resource packs",
+        "slug": "all_resource_packs",
+        "url": "https://www.curseforge.com/minecraft/texture-packs",
+        "iconUrl": "https://media.forgecdn.net/avatars/409/149/637623854107756264.png",
+        "dateModified": "2016-10-03T22:53:09.303Z",
+        "isClass": true
+    }].concat(resourcePackCats);
 
-    return resourcePackCats;
+    return concatCats;
 }

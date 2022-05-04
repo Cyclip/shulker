@@ -78,7 +78,7 @@ select option {
     border-radius: 5px;
 }
 
-select option[value="Any version"] {
+select option[value="All versions"] {
     color: rgb(206, 243, 191);
 }
 
