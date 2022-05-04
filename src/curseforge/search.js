@@ -18,15 +18,15 @@ export async function getResourcePacks(categoryId, searchQuery, versionString) {
         "pageSize": 30,
     };
 
-    if (categoryId != 0) {
+    if (categoryId !== 0) {
         params["categoryId"] = categoryId;
     }
 
-    if (searchQuery != "") {
+    if (searchQuery !== "") {
         params["searchFilter"] = searchQuery;
     }
 
-    if ((versionString != "All versions") && (versionString != "")) {
+    if ((versionString !== "All versions") && (versionString != "")) {
         params["gameVersion"] = versionString;
     }
 

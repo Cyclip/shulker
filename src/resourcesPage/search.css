@@ -105,3 +105,7 @@
     width: 100%;
     height: 100%;
 }
+
+.resourcePacks {
+    height: calc(100% - 80px);
+}

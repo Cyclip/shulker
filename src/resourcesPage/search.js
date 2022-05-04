@@ -5,6 +5,7 @@ import '../fonts.css';
 import '../animations.css';
 import '../App.css';
 import './search.css';
+import LoadingSVG from '../loading.svg';
 
 import {getCategories} from '../curseforge/categories.js';
 import {
@@ -142,7 +143,9 @@ export class SearchTab extends Component {
             this.state.selectedVersion,
         );
 
-        console.log("packs", packs);
+        this.setState({
+            resourcePacks: packs
+        });
     }
 
     // Load categories into state
@@ -206,6 +209,10 @@ export class SearchTab extends Component {
             ></input>
         );
 
+        const ResourcePackList = (
+
+        );
+
         return (
 
             <div className='search no-select'>
@@ -233,7 +240,12 @@ export class SearchTab extends Component {
                     </div>
 
                     <div className='resourcePacks'>
-                        
+                        {
+                            this.state.resourcePacks.length === 0 ? <div className="loading-container">
+                                <img className="loading" src={LoadingSVG}></img>
+                            </div>
+                            : {ResourcePackList}
+                        }
                     </div>
                 </div>
             </div>
