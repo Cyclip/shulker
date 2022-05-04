@@ -2,19 +2,6 @@
 
 import { invoke } from '@tauri-apps/api/tauri'
 
-const API_KEY = invoke('get_curseforge_api_key')
-    .then((data) => {const API_KEY = data;})
-    .catch((err) => {
-        console.error(`couldnt retrieve curseforge api key: ${err}`);
-});
-
-const HEADERS = {
-    'Accept': 'application/json',
-    'x-api-key': API_KEY
-};
-
-const BASE = "https://api.curseforge.com";
-
 /**
  * It takes a path and a params object, and returns a JSON object from the CurseForge API
  * https://docs.curseforge.com/
@@ -23,18 +10,33 @@ const BASE = "https://api.curseforge.com";
  * @returns A function that returns a promise.
  */
 export async function getCurseForge(path, params) {
-    // console.log("getCurseforge", path, params)
+    const API_KEY = invoke('get_curseforge_api_key')
+        .then((data) => {const API_KEY = data;})
+        .catch((err) => {
+            console.error(`couldnt retrieve curseforge api key: ${err}`);
+    });
+
+    const HEADERS = {
+        'Accept': 'application/json',
+        'x-api-key': API_KEY
+    };
+
+    const BASE = "https://api.curseforge.com";
+
     let paramsStr = stringFromParams(params);
-    // console.log("final path", BASE + path + paramsStr);
-    // console.log("headers", HEADERS);
-    let a = await fetch(BASE + path + paramsStr,
+    let finalPath = BASE + path + paramsStr;
+    let a = await fetch(finalPath,
         {
             method: 'GET',
             headers: HEADERS,
         }
     ).then(function(res) {
-        // console.log(res);
+        console.log(res);
         return res.json();
+    })
+    .catch((err) => {
+        console.error(`error fetching from ${finalPath}: ${err}`);
+        return;
     });
 
     return a;
@@ -55,8 +57,6 @@ export function getChildrenCategories(cats, n) {
             children.push(cat);
         }
     }
-
-    console.log(children);
 
     return children;
 }
