@@ -108,4 +108,37 @@
 
 .resourcePacks {
     height: calc(100% - 80px);
+    overflow-y: auto;
+}
+
+.resourcePacks .pack {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    padding: 20px 40px;
+    box-sizing: border-box;
+    background-color: rgba(255, 0, 0, 0.062);
+    display: flex;
+    justify-content: left;
+    gap: 10px;
+}
+
+.resourcePacks .sep {
+    left: 100px;
+    right: 100px;
+    background-color: rgba(255, 255, 255, 0.05);
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+}
+
+.resourcePacks .pack .preview {
+    object-fit: cover;
+    height: 100%;
+    width: auto;
+}
+
+.resourcePacks .pack .preview img {
+    width: 100%;
+    height: 100%;
 }

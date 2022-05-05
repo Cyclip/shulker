@@ -143,9 +143,14 @@ export class SearchTab extends Component {
             this.state.selectedVersion,
         );
 
+        packs = packs.slice(0, 4);
+        console.warn("Packs are truncated");
+
         this.setState({
             resourcePacks: packs
         });
+
+        console.log("packs", packs);
     }
 
     // Load categories into state
@@ -209,9 +214,28 @@ export class SearchTab extends Component {
             ></input>
         );
 
-        const ResourcePackList = (
+        let ResourcePackList;
 
-        );
+        if (this.state.resourcePacks.length === 0) {
+            ResourcePackList = (<div className="loading-container">
+                <img className="loading" src={LoadingSVG}></img>
+            </div>);
+        } else {
+            ResourcePackList = (
+                <div className='resourcePacks'>
+                    {
+                        this.state.resourcePacks.map((pack) => (
+                            <div className='pack'>
+                                <div className='preview'>
+                                    <img src={pack['logo']['thumbnailUrl']}/>
+                                </div>
+                                <div className='sep'></div>
+                            </div>
+                        ))
+                    }
+                </div>
+            );
+        }
 
         return (
 
@@ -240,12 +264,7 @@ export class SearchTab extends Component {
                     </div>
 
                     <div className='resourcePacks'>
-                        {
-                            this.state.resourcePacks.length === 0 ? <div className="loading-container">
-                                <img className="loading" src={LoadingSVG}></img>
-                            </div>
-                            : {ResourcePackList}
-                        }
+                        {ResourcePackList}
                     </div>
                 </div>
             </div>
