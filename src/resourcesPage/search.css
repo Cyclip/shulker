@@ -10,7 +10,7 @@
 }
 
 .search > div {
-    height: 100%;
+    height: calc(100% - 50px);
     width: 100%;
 }
 
@@ -107,7 +107,7 @@
 }
 
 .resourcePacks {
-    height: calc(100% - 80px);
+    height: calc(100% - 60px);
     overflow-y: auto;
 }
 
@@ -118,8 +118,8 @@
     padding: 20px 40px;
     box-sizing: border-box;
     background-color: rgba(255, 0, 0, 0.062);
-    display: flex;
-    justify-content: left;
+    display: grid;
+    grid-template-columns: 110px calc(100% - 110px);
     gap: 10px;
 }
 
@@ -134,11 +134,51 @@
 
 .resourcePacks .pack .preview {
     object-fit: cover;
-    height: 100%;
-    width: auto;
+    width: 100%;
+    height: auto;
 }
 
-.resourcePacks .pack .preview img {
-    width: 100%;
+.resourcePacks .pack .desc {
     height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.resourcePacks .pack .desc .title {
+    width: 90%;
+    display: flex;
+    justify-content: left;
+    font-size: 24px;
+}
+
+.resourcePacks .pack .desc .title h2 { 
+    font-weight: lighter;
+}
+
+.resourcePacks .pack .desc .title .packAuthor {
+    color: rgba(255, 255, 255, 0.1);
+    margin-top: 16px;
+}
+
+.resourcePacks .pack .desc .packSummary {
+    width: 90%;
+    height: calc(100% - 24px - 20px); /* - fontsize - padding */
+}
+
+.resourcePacks .pack .desc .stats {
+    position: absolute;
+    left: 8px;
+    bottom: -0;
+    display: flex;
+    justify-content: left;
+}
+
+.resourcePacks .pack .desc .stats .icon {
+    width: 20px;
+    height: 20px;
+}
+
+.resourcePacks .pack .desc .stats .packDownloads {
+    margin: 0;
+    font-weight: lighter;
 }

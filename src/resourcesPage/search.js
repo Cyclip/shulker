@@ -13,7 +13,10 @@ import {
     getResourcePacks
 } from '../curseforge/search.js';
 
-import { SearchIcon } from '@heroicons/react/solid'
+import { 
+    SearchIcon,
+    DownloadIcon,
+ } from '@heroicons/react/solid'
 import { toHaveAccessibleDescription } from '@testing-library/jest-dom/dist/matchers';
 
 
@@ -226,9 +229,21 @@ export class SearchTab extends Component {
                     {
                         this.state.resourcePacks.map((pack) => (
                             <div className='pack'>
-                                <div className='preview'>
-                                    <img src={pack['logo']['thumbnailUrl']}/>
+                                <img className='preview' src={pack['logo']['thumbnailUrl']}/>
+                                <div className='desc'>
+                                    <div className='title'>
+                                        <h3 className='packName'>{pack['name']}</h3>
+                                        <h6 className='packAuthor'>By {pack['authors'][0]['name']}</h6>
+                                    </div>
+                                    <h6 className='packSummary'>{pack['summary']}</h6>
+                                    <div className='stats'>
+                                        <DownloadIcon className='icon'/>
+                                        <h6 className='packDownloads'>{pack['downloadCount']}</h6>
+                                    </div>
                                 </div>
+                                <button 
+
+                                ></button>
                                 <div className='sep'></div>
                             </div>
                         ))
@@ -263,9 +278,7 @@ export class SearchTab extends Component {
                         </button>
                     </div>
 
-                    <div className='resourcePacks'>
-                        {ResourcePackList}
-                    </div>
+                    {ResourcePackList}
                 </div>
             </div>
         )
