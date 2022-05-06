@@ -9,6 +9,10 @@ use std::path::PathBuf;
 
 use crate::paths;
 
+use serde_json::{
+    Value,
+};
+
 /// Get all basic visible information on profiles
 #[tauri::command]
 pub fn get_profiles() -> Profiles {
@@ -44,11 +48,24 @@ pub fn save_profile(id: String, profile: DetailedProfile) -> Result<(), String> 
 pub fn get_curseforge_api_key() -> String {
     match data::read_preferences()["CURSEFORGE_API_KEY"].as_str() {
         Some(x) => {
-            println!("api key {}", x);
             x.to_string()
         },
         None => {
             panic!("missing key 'CURSEFORGE_API_KEY' in preferences");
         }
     }
+}
+
+#[tauri::command]
+pub fn get_installed_packs(packs: Value) -> Vec<String> {
+    for (key, value) in packs.as_object().unwrap() {
+        let valid_names = match value.as_array() {
+            Some(x) => x,
+            None => {continue;}
+        };
+
+        println!("{:?}", valid_names);
+    }
+
+    Vec::new()
 }

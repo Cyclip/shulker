@@ -55,7 +55,7 @@ export function filterInstalled(packs) {
     // }
 
     invoke("get_installed_packs", {
-        "packs": packs,
+        "packs": filenames,
     }).then(result => {
         return result;
     })

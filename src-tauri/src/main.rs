@@ -36,6 +36,7 @@ fn main() {
             commands::get_profile,
             commands::save_profile,
             commands::get_curseforge_api_key,
+            commands::get_installed_packs,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
