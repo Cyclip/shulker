@@ -163,6 +163,7 @@
 .resourcePacks .pack .desc .packSummary {
     width: 90%;
     height: calc(100% - 24px - 20px); /* - fontsize - padding */
+    font-weight: lighter;
 }
 
 .resourcePacks .pack .desc .stats {

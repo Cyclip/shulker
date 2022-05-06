@@ -1,3 +1,5 @@
+import { invoke } from '@tauri-apps/api/tauri'
+
 import {
     getCurseForge,
     getChildrenCategories,
@@ -36,4 +38,49 @@ export async function getResourcePacks(categoryId, searchQuery, versionString) {
     );
 
     return resp['data'];
+}
+
+export function filterInstalled(packs) {
+    let filenames = getFilenames(packs);
+    
+    // Example response:
+    // {
+    //     " Astral Sorcery Modpack": [
+    //         "java's astral modpack.zip"
+    //     ],
+    //     " Ultra Mlnecraft": [
+    //         "Minecraft Ultra-v1.zip"
+    //     ],
+    //     ...
+    // }
+
+    invoke("get_installed_packs", {
+        "packs": packs,
+    }).then(result => {
+        return result;
+    })
+
+    throw "Failed to return filtered packs";
+
+}
+
+/**
+ * It takes an array of objects, and returns an object whose keys are the values of the `name` property
+ * of each object in the array, and whose values are arrays of the unique values of the `fileName`
+ * property of each object in the `latestFiles` property of each object in the array.
+ * @param packs - an array of objects, each of which has a name and a latestFiles property.
+ * @returns An object with the name of the pack as the key and an array of filenames as the value.
+ */
+function getFilenames(packs) {
+    let rv = {};
+
+    for (const pack of packs) {
+        rv[pack['name']] = Array.from(
+            new Set(
+                pack["latestFiles"].map(i => i["fileName"])
+            )
+        );
+    };
+
+    return rv;
 }

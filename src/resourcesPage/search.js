@@ -10,7 +10,8 @@ import LoadingSVG from '../loading.svg';
 import {getCategories} from '../curseforge/categories.js';
 import {
     getVersions,
-    getResourcePacks
+    getResourcePacks,
+    filterInstalled,
 } from '../curseforge/search.js';
 
 import { 
@@ -140,11 +141,18 @@ export class SearchTab extends Component {
     // Load resource packs into state based on filters
     // (selectedCategoryId, searchQuery, selectedVersion)
     loadResourcePacks = async() => {
+        // get packs
         let packs = await getResourcePacks(
             this.state.selectedCategoryId,
             this.state.searchQuery,
             this.state.selectedVersion,
         );
+
+        // packs are retrieved from api, does not contain
+        // info regarding if it is installed
+        // refresh pack states to determine whether they are
+        // installed or not
+        let installedPacks = filterInstalled(packs);
 
         packs = packs.slice(0, 4);
         console.warn("Packs are truncated");
@@ -242,8 +250,15 @@ export class SearchTab extends Component {
                                     </div>
                                 </div>
                                 <button 
-
-                                ></button>
+                                    className={
+                                        'packButton ' +
+                                        (
+                                            pack['installed'] ? "installed" : ""
+                                        )
+                                    }
+                                >{
+                                    pack['installed'] ? "Installed" : "Install"
+                                }</button>
                                 <div className='sep'></div>
                             </div>
                         ))
