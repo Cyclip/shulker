@@ -148,14 +148,21 @@ export class SearchTab extends Component {
             this.state.selectedVersion,
         );
 
+        console.log("packs", packs);
+
         // packs are retrieved from api, does not contain
         // info regarding if it is installed
         // refresh pack states to determine whether they are
         // installed or not
-        let installedPacks = filterInstalled(packs);
+        let installedPacks = await filterInstalled(packs);
+        
+        // apply
+        packs.map(i => {
+            i['installed'] = installedPacks.includes(i['name'])
+        });
 
-        packs = packs.slice(0, 4);
-        console.warn("Packs are truncated");
+        //packs = packs.slice(2, 6);
+        //console.warn("Packs are truncated");
 
         this.setState({
             resourcePacks: packs
@@ -236,12 +243,15 @@ export class SearchTab extends Component {
                 <div className='resourcePacks'>
                     {
                         this.state.resourcePacks.map((pack) => (
-                            <div className='pack'>
+                            <div className='pack' key={pack['id']}>
                                 <img className='preview' src={pack['logo']['thumbnailUrl']}/>
                                 <div className='desc'>
                                     <div className='title'>
                                         <h3 className='packName'>{pack['name']}</h3>
-                                        <h6 className='packAuthor'>By {pack['authors'][0]['name']}</h6>
+                                        <h6 className='packAuthor'>By {
+                                            pack['authors'].length > 0 ? pack['authors'][0]['name']
+                                            : "unknown author"
+                                        }</h6>
                                     </div>
                                     <h6 className='packSummary'>{pack['summary']}</h6>
                                     <div className='stats'>

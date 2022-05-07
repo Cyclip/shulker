@@ -18,6 +18,7 @@ export async function getResourcePacks(categoryId, searchQuery, versionString) {
     let params = {
         "gameId": 432,
         "pageSize": 30,
+        "classId": 12,
     };
 
     if (categoryId !== 0) {
@@ -40,8 +41,9 @@ export async function getResourcePacks(categoryId, searchQuery, versionString) {
     return resp['data'];
 }
 
-export function filterInstalled(packs) {
+export async function filterInstalled(packs) {
     let filenames = getFilenames(packs);
+    console.log("filenames", filenames);
     
     // Example response:
     // {
@@ -54,14 +56,15 @@ export function filterInstalled(packs) {
     //     ...
     // }
 
-    invoke("get_installed_packs", {
-        "packs": filenames,
-    }).then(result => {
-        return result;
-    })
-
-    throw "Failed to return filtered packs";
-
+    const installed = await invoke('get_installed_packs', {"packs": filenames}
+    ).then(function(data) {
+            return data;
+        })
+        .catch((err) => {
+            console.error(`couldnt retrieve installed packs: ${err}`);
+    });
+    
+    return installed;
 }
 
 /**

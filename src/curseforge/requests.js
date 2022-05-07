@@ -28,12 +28,13 @@ export async function getCurseForge(path, params) {
     let paramsStr = stringFromParams(params);
     let finalPath = BASE + path + paramsStr;
 
-    console.log(`Calling ${finalPath}`)
+    console.log(`Calling ${finalPath} with`, HEADERS)
 
     let a = await fetch(finalPath,
         {
             method: 'GET',
             headers: HEADERS,
+            mode: 'cors',
         }
     ).then(function(resp) {
         console.log(`response from ${finalPath}`);

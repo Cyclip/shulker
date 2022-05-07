@@ -12,6 +12,7 @@ mod profiles;
 mod commands;
 mod constants;
 mod data;
+mod packs;
 
 use std::fs::File;
 use std::io::Write;

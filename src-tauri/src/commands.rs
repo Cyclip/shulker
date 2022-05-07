@@ -1,17 +1,19 @@
-use crate::data;
+use crate::{
+    data,
+    paths,
+    packs,
+};
 
 use crate::profiles::{
     Profiles,
     DetailedProfile,
 };
 
-use std::path::PathBuf;
-
-use crate::paths;
-
 use serde_json::{
     Value,
 };
+
+use std::path::PathBuf;
 
 /// Get all basic visible information on profiles
 #[tauri::command]
@@ -58,14 +60,5 @@ pub fn get_curseforge_api_key() -> String {
 
 #[tauri::command]
 pub fn get_installed_packs(packs: Value) -> Vec<String> {
-    for (key, value) in packs.as_object().unwrap() {
-        let valid_names = match value.as_array() {
-            Some(x) => x,
-            None => {continue;}
-        };
-
-        println!("{:?}", valid_names);
-    }
-
-    Vec::new()
+    packs::get_installed_packs(packs)
 }
