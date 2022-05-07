@@ -263,12 +263,10 @@ export class SearchTab extends Component {
                                     className={
                                         'packButton ' +
                                         (
-                                            pack['installed'] ? "installed" : ""
+                                            pack['installed'] ? "installed" : "uninstalled"
                                         )
                                     }
-                                >{
-                                    pack['installed'] ? "Installed" : "Install"
-                                }</button>
+                                ><span className='buttonText'></span></button>
                                 <div className='sep'></div>
                             </div>
                         ))

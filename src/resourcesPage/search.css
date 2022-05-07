@@ -189,3 +189,52 @@
     margin: 0;
     font-weight: lighter;
 }
+
+.resourcePacks .pack .packButton {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+    padding: 7px 15px;
+    font-size: 20px;
+    text-transform: capitalize;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+
+    transition: 0.2s ease;
+}
+
+.resourcePacks .pack .packButton.installed {
+    background-color: #5cdb5c;
+    color: white;
+}
+
+.resourcePacks .pack .packButton.installed:hover {
+    background-color: #db805c;
+    color: black;
+}
+
+.resourcePacks .pack .packButton.installed .buttonText:before {
+    content: "Installed";
+}
+
+.resourcePacks .pack .packButton.installed:hover .buttonText:before {
+    content: "Delete?";
+}
+
+.resourcePacks .pack .packButton.uninstalled {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.resourcePacks .pack .packButton.uninstalled:hover {
+    border: 2px solid #5cdb5c;
+    color: #5cdb5c;
+}
+
+.resourcePacks .pack .packButton.uninstalled .buttonText:before {
+    content: "Install";
+}
