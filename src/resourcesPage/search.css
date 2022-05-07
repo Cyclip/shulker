@@ -119,10 +119,19 @@
     width: 100%;
     padding: 20px 40px;
     box-sizing: border-box;
-    background-color: rgba(255, 0, 0, 0.062);
     display: grid;
     grid-template-columns: 70px calc(100% - 70px);
     gap: 10px;
+
+    transition: 0.2s ease;
+}
+
+.resourcePacks .pack:nth-child(2n) {
+    background-color: rgba(71, 86, 87, 0.05);
+}
+
+.resourcePacks .pack:hover {
+    background-color: rgba(172, 172, 255, 0.05);
 }
 
 .resourcePacks .sep {
@@ -212,13 +221,14 @@
 }
 
 .resourcePacks .pack .packButton.installed {
-    background-color: #5cdb5c;
+    background-color: transparent;
+    border: 1px solid white;
     color: white;
 }
 
 .resourcePacks .pack .packButton.installed:hover {
-    background-color: #db805c;
-    color: black;
+    border: 1px solid #db805c;
+    color: #db805c;
 }
 
 .resourcePacks .pack .packButton.installed .buttonText:before {
@@ -226,18 +236,17 @@
 }
 
 .resourcePacks .pack .packButton.installed:hover .buttonText:before {
+    border: none;
     content: "Delete?";
 }
 
 .resourcePacks .pack .packButton.uninstalled {
-    background-color: transparent;
-    border: 2px solid white;
+    background-color: #5cdb5c;
     color: white;
 }
 
 .resourcePacks .pack .packButton.uninstalled:hover {
-    border: 2px solid #5cdb5c;
-    color: #5cdb5c;
+    background-color: #47c947;
 }
 
 .resourcePacks .pack .packButton.uninstalled .buttonText:before {
