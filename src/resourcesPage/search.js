@@ -254,11 +254,11 @@ export class SearchTab extends Component {
                                         }</h6>
                                     </div>
                                     <h6 className='packSummary'>{pack['summary']}</h6>
-                                    <div className='stats'>
+                                </div>
+                                <div className='stats'>
                                         <DownloadIcon className='icon'/>
                                         <h6 className='packDownloads'>{pack['downloadCount']}</h6>
                                     </div>
-                                </div>
                                 <button 
                                     className={
                                         'packButton ' +
