@@ -127,6 +127,9 @@ export class SearchTab extends Component {
             /* resource pack listings */
             // all listed resource packs
             resourcePacks: [],
+
+            // cooldown for searching
+            lastSearch: 0,
         }
     }
 
@@ -223,15 +226,18 @@ export class SearchTab extends Component {
     }
 
     search = () => {
-        console.log("called search");
-        this.setState({
-            resourcePacks: []
-        },
-            // callback when it finishes changing
-            () => this.loadResourcePacks()
-        );
+        let now = Date.now();
+        let next = this.state.lastSearch + 1000;
 
-        
+        if (now > next) {
+            this.setState({
+                resourcePacks: [],
+                lastSearch: now
+            },
+                // callback when it finishes changing
+                () => this.loadResourcePacks()
+            );
+        }
     }
 
     getLogo = (pack) => {
