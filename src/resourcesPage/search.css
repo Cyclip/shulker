@@ -147,6 +147,7 @@
     object-fit: cover;
     width: auto;
     max-height: 70px;
+    max-width: 70px;
     height: auto;
 }
 

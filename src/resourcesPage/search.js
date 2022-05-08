@@ -222,6 +222,26 @@ export class SearchTab extends Component {
         });
     }
 
+    search = () => {
+        console.log("called search");
+        this.setState({
+            resourcePacks: []
+        },
+            // callback when it finishes changing
+            () => this.loadResourcePacks()
+        );
+
+        
+    }
+
+    getLogo = (pack) => {
+        if (pack['logo'] !== null) {
+            return pack['logo']['thumbnailUrl'];
+        } else {
+            return "https://via.placeholder.com/150";
+        }
+    }
+
     render() {
         const SearchBar = (
             <input
@@ -229,6 +249,11 @@ export class SearchTab extends Component {
                 placeholder='Search resource packs..'
                 value={this.state.searchQuery}
                 onInput={(e) => this.updateSearchQuery(e)}
+                onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                        this.search();
+                    }
+                }}
             ></input>
         );
 
@@ -244,7 +269,7 @@ export class SearchTab extends Component {
                     {
                         this.state.resourcePacks.map((pack) => (
                             <div className='pack' key={pack['id']}>
-                                <img className='preview' src={pack['logo']['thumbnailUrl']}/>
+                                <img className='preview' src={this.getLogo(pack)}/>
                                 <div className='desc'>
                                     <div className='title'>
                                         <h3 className='packName'>{pack['name']}</h3>
@@ -296,7 +321,7 @@ export class SearchTab extends Component {
                             selectCallback={this.versionSelectCallback}
                             ref={(ip) => this.versionListRef = ip}
                         />
-                        <button className='searchbarItemBig searchButton'>
+                        <button className='searchbarItemBig searchButton' onClick={this.search()}>
                             <SearchIcon className='searchIcon'/>
                         </button>
                     </div>

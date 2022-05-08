@@ -19,6 +19,8 @@ export async function getResourcePacks(categoryId, searchQuery, versionString) {
         "gameId": 432,
         "pageSize": 30,
         "classId": 12,
+        "sortField": 2, // sort by popularity
+        "sortOrder": "desc"
     };
 
     if (categoryId !== 0) {
@@ -29,7 +31,7 @@ export async function getResourcePacks(categoryId, searchQuery, versionString) {
         params["searchFilter"] = searchQuery;
     }
 
-    if ((versionString !== "All versions") && (versionString != "")) {
+    if ((versionString !== "any") && (versionString != "")) {
         params["gameVersion"] = versionString;
     }
 
