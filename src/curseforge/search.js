@@ -13,6 +13,39 @@ export async function getVersions() {
     return versions;
 }
 
+export async function getPackFiles(id) {
+    let data = await getCurseForge(`/v1/mods/${id}/files`, {});
+    data = data.data;
+    console.log("data", data);
+    
+    let versions = {};
+
+    for (const fileIndex in data) {
+        let file = data[fileIndex];
+        for (const verIndex in file["gameVersions"]) {
+            let ver = file["gameVersions"][verIndex];
+
+            if (!versions.hasOwnProperty(ver)) {
+                versions[ver] = file["downloadUrl"];
+            }
+        }
+    }
+
+    console.log("versions", versions);
+
+    return objectToArr(versions);
+}
+
+function objectToArr(obj) {
+    let result = [];
+
+    for (const i in obj) {
+        result.push([i, obj[i]]);
+    }
+
+    return result;
+}
+
 // Get a filtered list of resource packs
 export async function getResourcePacks(categoryId, searchQuery, versionString) {
     let params = {
@@ -45,7 +78,6 @@ export async function getResourcePacks(categoryId, searchQuery, versionString) {
 
 export async function filterInstalled(packs) {
     let filenames = getFilenames(packs);
-    console.log("filenames", filenames);
     
     // Example response:
     // {

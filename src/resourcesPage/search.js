@@ -12,6 +12,7 @@ import {
     getVersions,
     getResourcePacks,
     filterInstalled,
+    getPackFiles,
 } from '../curseforge/search.js';
 
 import { 
@@ -130,12 +131,22 @@ export class SearchTab extends Component {
 
             // cooldown for searching
             lastSearch: 0,
+
+            // if download list popup shown
+            downloadListPopupVisible: false,
+
+            // name of current download
+            downloadListName: "name",
+
+            // map of all versions to download url
+            downloadListFiles: [["pp", "pprul"]],
         }
     }
 
     
     // When component mounts/loads
     async componentDidMount() {
+        console.log("mounting component");
         this.loadCategories();
         this.loadVersions();
         this.loadResourcePacks();
@@ -161,7 +172,7 @@ export class SearchTab extends Component {
         
         // apply
         packs.map(i => {
-            i['installed'] = installedPacks.includes(i['name'])
+            i['installed'] = installedPacks.includes(i['name']) ? "installed" : "uninstalled";
         });
 
         //packs = packs.slice(2, 6);
@@ -225,10 +236,13 @@ export class SearchTab extends Component {
         });
     }
 
+    // reload all resource packs
     search = () => {
+        console.log("called search");
         let now = Date.now();
         let next = this.state.lastSearch + 1000;
 
+        // if cooldown passed
         if (now > next) {
             this.setState({
                 resourcePacks: [],
@@ -240,12 +254,53 @@ export class SearchTab extends Component {
         }
     }
 
+    /* It's a function that returns the logo of a resource pack. */
     getLogo = (pack) => {
         if (pack['logo'] !== null) {
             return pack['logo']['thumbnailUrl'];
         } else {
             return "https://via.placeholder.com/150";
         }
+    }
+
+    /* It's a function that adds commas to numbers. */
+    numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    showDownloadList = () => {
+        this.setState({
+            downloadListPopupVisible: true,
+        });
+
+        console.log("state files", this.state.downloadListFiles);
+    }
+
+    downloadUrl = (url) => {
+        console.log("downloadUrl", url);
+    }
+
+    // try to downlaod the resouce pack
+    tryDownload = async(packIndex) => {
+        let files = await getPackFiles(this.state.resourcePacks[packIndex].id);
+        // returns an object where the key is the version and string is the download url
+
+        this.setState({
+            downloadListFiles: files,
+        }, () => {
+            // callback
+            this.showDownloadList();
+        })
+
+        // // disgustingly update state
+        // console.log("try download called for", packIndex);
+        // this.setState(state => {
+        //     state.resourcePacks[packIndex]["installed"] = "installing";
+        //     return state;
+        // }, () => {
+        //     // actually try to download it
+            
+        // });
     }
 
     render() {
@@ -257,6 +312,7 @@ export class SearchTab extends Component {
                 onInput={(e) => this.updateSearchQuery(e)}
                 onKeyPress={(e) => {
                     if (e.key === "Enter") {
+                        console.log("search bar search")
                         this.search();
                     }
                 }}
@@ -273,7 +329,7 @@ export class SearchTab extends Component {
             ResourcePackList = (
                 <div className='resourcePacks'>
                     {
-                        this.state.resourcePacks.map((pack) => (
+                        this.state.resourcePacks.map((pack, index) => (
                             <div className='pack' key={pack['id']}>
                                 <img className='preview' src={this.getLogo(pack)}/>
                                 <div className='desc'>
@@ -288,15 +344,18 @@ export class SearchTab extends Component {
                                 </div>
                                 <div className='stats'>
                                         <DownloadIcon className='icon'/>
-                                        <h6 className='packDownloads'>{pack['downloadCount']}</h6>
+                                        <h6 className='packDownloads'>{this.numberWithCommas(pack['downloadCount'])}</h6>
                                     </div>
                                 <button 
                                     className={
-                                        'packButton ' +
-                                        (
-                                            pack['installed'] ? "installed" : "uninstalled"
-                                        )
+                                        'packButton ' + (pack['installed'])
                                     }
+                                    onClick={() => {
+                                        console.log("click registered")
+                                        if (pack['installed'] === "uninstalled") {
+                                            this.tryDownload(index)
+                                        }
+                                    }}
                                 ><span className='buttonText'></span></button>
                                 <div className='sep'></div>
                             </div>
@@ -305,6 +364,26 @@ export class SearchTab extends Component {
                 </div>
             );
         }
+
+        const DownloadList = (
+            <div className='downloadList'>
+                <div className='box'>
+                    <h2 className='title'>Select version for {this.state.downloadListName}</h2>
+                    <div className='versions'>
+                        {
+                            this.state.downloadListFiles.map((item) => (
+                                <button
+                                    key={item[0]}
+                                    className='download'
+                                    onClick={() => {this.downloadUrl(item[1])}}
+                                >{item[0]}</button>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        );
+        
 
         return (
 
@@ -327,13 +406,21 @@ export class SearchTab extends Component {
                             selectCallback={this.versionSelectCallback}
                             ref={(ip) => this.versionListRef = ip}
                         />
-                        <button className='searchbarItemBig searchButton' onClick={this.search()}>
+                        <button className='searchbarItemBig searchButton' onClick={() => {
+                            this.search();
+                            console.log("icon search");
+                        }}>
                             <SearchIcon className='searchIcon'/>
                         </button>
                     </div>
 
                     {ResourcePackList}
+                
                 </div>
+
+                {
+                    this.state.downloadListPopupVisible && DownloadList
+                }
             </div>
         )
     }

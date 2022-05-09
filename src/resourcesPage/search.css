@@ -221,6 +221,7 @@
     transition: 0.2s ease;
 }
 
+/* installed */
 .resourcePacks .pack .packButton.installed {
     background-color: transparent;
     border: 1px solid white;
@@ -241,6 +242,25 @@
     content: "Delete?";
 }
 
+/* installING */
+.resourcePacks .pack .packButton.installing {
+    background-color: #5cd3db;
+    color: white;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.resourcePacks .pack .packButton.installing:hover {
+    background-color: #5cd3db;
+}
+
+.resourcePacks .pack .packButton.installing .buttonText:before {
+    content: "Installing..";
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* uninstalled */
 .resourcePacks .pack .packButton.uninstalled {
     background-color: #5cdb5c;
     color: white;
@@ -252,4 +272,64 @@
 
 .resourcePacks .pack .packButton.uninstalled .buttonText:before {
     content: "Install";
+}
+
+/* download list */
+.downloadList {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.downloadList .box {
+    position: relative;
+    width: 700px;
+    height: 400px;
+    background-color: var(--black);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.downloadList .box .title {
+    text-overflow: ellipsis;
+    width: 100%;
+    height: 45px;
+    padding: 5px 0;
+    margin: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.downloadList .box .versions {
+    position: relative;
+    height: calc(100% - 45px - 55px);
+    width: 100%;
+    overflow: auto;
+}
+
+.downloadList .box .versions .download {
+    width: 160px;
+    height: 40px;
+    padding: 10px;
+    background-color: #4d80ce;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    margin: 5px;
+    font-size: 18px;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.downloadList .box .versions .download:hover {
+    background-color: #1a60ca;
+    box-shadow: 0 0 50px 20px rgba(0, 0, 0, 0.2);
 }
