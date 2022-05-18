@@ -272,8 +272,12 @@ export class SearchTab extends Component {
         this.setState({
             downloadListPopupVisible: true,
         });
+    }
 
-        console.log("state files", this.state.downloadListFiles);
+    hideDownloadList = () => {
+        this.setState({
+            downloadListPopupVisible: false,
+        });
     }
 
     downloadUrl = (url) => {
@@ -282,25 +286,18 @@ export class SearchTab extends Component {
 
     // try to downlaod the resouce pack
     tryDownload = async(packIndex) => {
-        let files = await getPackFiles(this.state.resourcePacks[packIndex].id);
-        // returns an object where the key is the version and string is the download url
+        if (!this.state.showDownloadList) {
+            let files = await getPackFiles(this.state.resourcePacks[packIndex].id);
+            // returns an object where the key is the version and string is the download url
 
-        this.setState({
-            downloadListFiles: files,
-        }, () => {
-            // callback
-            this.showDownloadList();
-        })
-
-        // // disgustingly update state
-        // console.log("try download called for", packIndex);
-        // this.setState(state => {
-        //     state.resourcePacks[packIndex]["installed"] = "installing";
-        //     return state;
-        // }, () => {
-        //     // actually try to download it
-            
-        // });
+            this.setState({
+                downloadListFiles: files,
+                downloadListName: this.state.resourcePacks[packIndex].name,
+            }, () => {
+                // callback
+                this.showDownloadList();
+            })
+        }
     }
 
     render() {
@@ -380,6 +377,10 @@ export class SearchTab extends Component {
                             ))
                         }
                     </div>
+                    <button 
+                        className='close'
+                        onClick={this.hideDownloadList}
+                    >Close</button>
                 </div>
             </div>
         );
