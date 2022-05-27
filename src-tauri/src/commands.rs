@@ -2,6 +2,7 @@ use crate::{
     data,
     paths,
     packs,
+    downloads,
 };
 
 use crate::profiles::{
@@ -61,4 +62,16 @@ pub fn get_curseforge_api_key() -> String {
 #[tauri::command]
 pub fn get_installed_packs(packs: Value) -> Vec<String> {
     packs::get_installed_packs(packs)
+}
+
+#[tauri::command]
+pub async fn download_pack(url: String, name: String) -> Result<(), ()> {
+    let mut path = paths::minecraft_path(
+        Some(PathBuf::from("resourcepacks"))
+    );
+
+    path.push(name);
+
+    downloads::download_file(url, path);
+    Ok(())
 }

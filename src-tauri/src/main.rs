@@ -6,6 +6,7 @@
 extern crate serde;
 extern crate serde_json;
 extern crate directories;
+extern crate ureq;
 
 mod paths;
 mod profiles;
@@ -13,6 +14,7 @@ mod commands;
 mod constants;
 mod data;
 mod packs;
+mod downloads;
 
 use std::fs::File;
 use std::io::Write;
@@ -38,6 +40,7 @@ fn main() {
             commands::save_profile,
             commands::get_curseforge_api_key,
             commands::get_installed_packs,
+            commands::download_pack,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

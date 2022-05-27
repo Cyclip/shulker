@@ -16,7 +16,6 @@ export async function getVersions() {
 export async function getPackFiles(id) {
     let data = await getCurseForge(`/v1/mods/${id}/files`, {});
     data = data.data;
-    console.log("data", data);
     
     let versions = {};
 
@@ -30,8 +29,6 @@ export async function getPackFiles(id) {
             }
         }
     }
-
-    console.log("versions", versions);
 
     return objectToArr(versions);
 }

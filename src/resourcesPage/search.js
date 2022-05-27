@@ -138,8 +138,14 @@ export class SearchTab extends Component {
             // name of current download
             downloadListName: "name",
 
+            // id of current download
+            downloadListId: 0,
+
             // map of all versions to download url
             downloadListFiles: [["pp", "pprul"]],
+
+            // current pack index
+            downloadPackIndex: 0,
         }
     }
 
@@ -280,8 +286,49 @@ export class SearchTab extends Component {
         });
     }
 
-    downloadUrl = (url) => {
-        console.log("downloadUrl", url);
+    // update a state asynchronously (force to update)
+    setStateAsync = (state) => {
+        return new Promise((resolve) => {
+            this.setState(state, resolve)
+        });
+    }
+
+    // download resource pack url
+    downloadUrl = async(item) => {
+        let url = item[1];
+
+        this.hideDownloadList();
+
+        if (url === null) {
+            // missing download link, try to retrieve
+            console.error("Missing url for", item);
+            console.warn("Retrieving URL is not implemented currently");
+            return;
+        }
+
+        // pre download
+        await this.setStateAsync(state => {
+            state.resourcePacks[this.state.downloadPackIndex].installed = "installing"
+        });
+
+        // download file
+        console.log("downloading", url, url.split("/").slice(-1)[0]);
+        
+        await invoke("download_pack", {
+            "url": url,
+            "name": url.split("/").slice(-1)[0]
+        })
+        .then(async(resp) => {
+            console.log("download response", resp);
+
+            // set to installed
+            await this.setStateAsync(state => {
+                state.resourcePacks[this.state.downloadPackIndex].installed = "installed"
+            });
+        })
+        .catch((err) => console.error(err));
+
+        this.forceUpdate();
     }
 
     // try to downlaod the resouce pack
@@ -292,7 +339,9 @@ export class SearchTab extends Component {
 
             this.setState({
                 downloadListFiles: files,
+                downloadListId: this.state.resourcePacks[packIndex].id,
                 downloadListName: this.state.resourcePacks[packIndex].name,
+                downloadPackIndex: packIndex,
             }, () => {
                 // callback
                 this.showDownloadList();
@@ -372,7 +421,9 @@ export class SearchTab extends Component {
                                 <button
                                     key={item[0]}
                                     className='download'
-                                    onClick={() => {this.downloadUrl(item[1])}}
+                                    onClick={() => {
+                                        this.downloadUrl(item);
+                                    }}
                                 >{item[0]}</button>
                             ))
                         }
