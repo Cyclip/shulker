@@ -2,6 +2,7 @@ import { invoke } from '@tauri-apps/api/tauri'
 
 import {
     getCurseForge,
+    getCurseForgeBody,
     getChildrenCategories,
 } from './requests.js';
 
@@ -73,48 +74,58 @@ export async function getResourcePacks(categoryId, searchQuery, versionString) {
     return resp['data'];
 }
 
+ // Example response:
+// {
+//     " Astral Sorcery Modpack": [
+//         "java's astral modpack.zip"
+//     ],
+//     " Ultra Mlnecraft": [
+//         "Minecraft Ultra-v1.zip"
+//     ],
+//     ...
+// }
 export async function filterInstalled(packs) {
-    let filenames = getFilenames(packs);
+    console.log("filterInstalled packs", packs);
     
-    // Example response:
-    // {
-    //     " Astral Sorcery Modpack": [
-    //         "java's astral modpack.zip"
-    //     ],
-    //     " Ultra Mlnecraft": [
-    //         "Minecraft Ultra-v1.zip"
-    //     ],
-    //     ...
-    // }
+    // get array of all mod IDs
+    let ids = packs.map(i => i.id);
+   
+    // try to get hashes
+    let resp = await getCurseForgeBody(
+        "/v1/mods",
+        {
+            "modIds": ids
+        }
+    )['data'];
 
-    const installed = await invoke('get_installed_packs', {"packs": filenames}
-    ).then(function(data) {
-            return data;
-        })
-        .catch((err) => {
-            console.error(`couldnt retrieve installed packs: ${err}`);
+    // get filenames
+    let filenames = {}
+
+    for (const modIndex in d) {
+        let mod = d[modIndex];
+        let name = mod.name;
+        let filenames = [];
+
+        for (const fileIndex in mod.latestFilesIndexes) {
+            let filename = mod.latestFilesIndexes[fileIndex].filename;
+
+            if (!filenames.includes(filename)) {
+                filenames.push(filename);
+            }
+        }
+        
+        filenames[name] = filenames;
+    }
+
+    // check for each mod if its installed
+    let installed = await invoke('get_installed_packs', {"packs": filenames})
+    .then(function(data) {
+        return data;
+    })
+    .catch((err) => {
+        console.error(`couldnt retrieve installed packs: ${err}`);
+        return;
     });
-    
+
     return installed;
-}
-
-/**
- * It takes an array of objects, and returns an object whose keys are the values of the `name` property
- * of each object in the array, and whose values are arrays of the unique values of the `fileName`
- * property of each object in the `latestFiles` property of each object in the array.
- * @param packs - an array of objects, each of which has a name and a latestFiles property.
- * @returns An object with the name of the pack as the key and an array of filenames as the value.
- */
-function getFilenames(packs) {
-    let rv = {};
-
-    for (const pack of packs) {
-        rv[pack['name']] = Array.from(
-            new Set(
-                pack["latestFiles"].map(i => i["fileName"])
-            )
-        );
-    };
-
-    return rv;
 }

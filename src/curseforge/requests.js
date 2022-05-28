@@ -2,6 +2,42 @@
 
 import { invoke } from '@tauri-apps/api/tauri'
 
+const BASE = "https://api.curseforge.com";
+
+/**
+ * It takes a path and a body, and returns a JSON object.
+ * Makes a POST request containing a body rather than GET with parameters
+ * @param path - /api/v2/addon/search
+ * @param body - {
+ * @returns A Promise.
+ */
+export async function getCurseForgeBody(path, body) {
+    let inputBody = JSON.stringify(body);
+    let HEADERS = getHeaders();
+    let path = BASE + path;
+
+    let r = await fetch(path, {
+        method: 'POST',
+        headers: HEADERS,
+        body: inputBody
+    })
+    .then(function(resp) {
+        console.log(`body response from ${path}`);
+
+        if (!resp.ok) {
+            throw `Server error: [${resp.status}] [${resp.statusText}] [${resp.url}]`;
+        }
+        return resp.json()
+    })
+    .catch((err) => {
+        console.error(`error fetching from ${finalPath}: ${err}`);
+        return;
+    });
+
+    return r;
+}
+
+
 /**
  * It takes a path and a params object, and returns a JSON object from the CurseForge API
  * https://docs.curseforge.com/
@@ -10,27 +46,14 @@ import { invoke } from '@tauri-apps/api/tauri'
  * @returns A function that returns a promise.
  */
 export async function getCurseForge(path, params) {
-    const API_KEY = await invoke('get_curseforge_api_key')
-        .then(function(data) {
-            return data;
-        })
-        .catch((err) => {
-            console.error(`couldnt retrieve curseforge api key: ${err}`);
-    });
-
-    const HEADERS = {
-        'Accept': 'application/json',
-        'x-api-key': API_KEY
-    };
-
-    const BASE = "https://api.curseforge.com";
+    const HEADERS = await getHeaders();
 
     let paramsStr = stringFromParams(params);
     let finalPath = BASE + path + paramsStr;
 
     console.log(`Calling ${finalPath} with`, HEADERS)
 
-    let a = await fetch(finalPath,
+    let r = await fetch(finalPath,
         {
             method: 'GET',
             headers: HEADERS,
@@ -48,7 +71,28 @@ export async function getCurseForge(path, params) {
         return;
     });
 
-    return a;
+    return r;
+}
+/**
+ * It returns an object containing the headers required to make a request to
+ * the CurseForge API
+ * @returns a promise.
+ */
+
+async function getHeaders() {
+    const API_KEY = await invoke('get_curseforge_api_key')
+        .then(function(data) {
+            return data;
+        })
+        .catch((err) => {
+            console.error(`couldnt retrieve curseforge api key: ${err}`);
+    });
+
+    return {
+        'Content-Type':'application/json',
+        'Accept':'application/json',
+        'x-api-key': API_KEY
+    };
 }
 
 /**
