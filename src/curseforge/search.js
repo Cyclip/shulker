@@ -85,37 +85,43 @@ export async function getResourcePacks(categoryId, searchQuery, versionString) {
 //     ...
 // }
 export async function filterInstalled(packs) {
-    console.log("filterInstalled packs", packs);
-    
     // get array of all mod IDs
     let ids = packs.map(i => i.id);
    
-    // try to get hashes
+    // try to get all mods
     let resp = await getCurseForgeBody(
         "/v1/mods",
         {
             "modIds": ids
         }
-    )['data'];
+    );
+
+    resp = resp.data;
+    console.log("response data", resp);
 
     // get filenames
     let filenames = {}
 
-    for (const modIndex in d) {
-        let mod = d[modIndex];
+    for (const modIndex in resp) {
+        let mod = resp[modIndex];
         let name = mod.name;
-        let filenames = [];
+        let files = [];
+
+        console.log("checking mod", mod);
 
         for (const fileIndex in mod.latestFilesIndexes) {
             let filename = mod.latestFilesIndexes[fileIndex].filename;
 
-            if (!filenames.includes(filename)) {
-                filenames.push(filename);
+            if (!files.includes(filename)) {
+                files.push(filename);
             }
         }
         
-        filenames[name] = filenames;
+        filenames[name] = files;
+        console.log(`setting ${name} to ${filenames}`);
     }
+
+    console.log("filterInstalled filenames:", filenames);
 
     // check for each mod if its installed
     let installed = await invoke('get_installed_packs', {"packs": filenames})
@@ -126,6 +132,8 @@ export async function filterInstalled(packs) {
         console.error(`couldnt retrieve installed packs: ${err}`);
         return;
     });
+
+    console.log("filterInstalled installed:", installed);
 
     return installed;
 }

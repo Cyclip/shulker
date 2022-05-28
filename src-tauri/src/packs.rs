@@ -58,7 +58,8 @@ fn get_all_installed() -> Vec<String> {
 fn get_filename(path: fs::DirEntry) -> String {
     let raw = path.path().file_name().unwrap().to_string_lossy().into_owned();
     // downloading might result in '+' instead of ' ' in the filenames
-    raw.replace("+", " ")
+    // raw.replace("+", " ")
+    raw
 }
 
 fn is_installed(installed: &Vec<String>, test: &String) -> bool {

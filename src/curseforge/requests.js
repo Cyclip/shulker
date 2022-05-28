@@ -13,10 +13,9 @@ const BASE = "https://api.curseforge.com";
  */
 export async function getCurseForgeBody(path, body) {
     let inputBody = JSON.stringify(body);
-    let HEADERS = getHeaders();
-    let path = BASE + path;
+    let HEADERS = await getHeaders();
 
-    let r = await fetch(path, {
+    let r = await fetch(BASE + path, {
         method: 'POST',
         headers: HEADERS,
         body: inputBody
@@ -27,12 +26,14 @@ export async function getCurseForgeBody(path, body) {
         if (!resp.ok) {
             throw `Server error: [${resp.status}] [${resp.statusText}] [${resp.url}]`;
         }
-        return resp.json()
+        let r = resp.json();
+        return r;
     })
     .catch((err) => {
-        console.error(`error fetching from ${finalPath}: ${err}`);
+        console.error(`error fetching from ${BASE + path}: ${err}`);
         return;
     });
+
 
     return r;
 }
