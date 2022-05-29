@@ -15,6 +15,7 @@ use serde_json::{
 };
 
 use std::path::PathBuf;
+use std::fs;
 
 /// Get all basic visible information on profiles
 #[tauri::command]
@@ -65,6 +66,16 @@ pub fn get_installed_packs(packs: Value) -> Vec<String> {
 }
 
 #[tauri::command]
+/// It downloads a resource pack from a URL and saves it to a path
+/// 
+/// Arguments:
+/// 
+/// * `url`: The URL to the resource pack.
+/// * `name`: The name of the resource pack.
+/// 
+/// Returns:
+/// 
+/// A Result<(), ()>
 pub async fn download_pack(url: String, name: String) -> Result<(), ()> {
     let mut path = paths::minecraft_path(
         Some(PathBuf::from("resourcepacks"))
@@ -74,4 +85,29 @@ pub async fn download_pack(url: String, name: String) -> Result<(), ()> {
 
     downloads::download_file(url, path);
     Ok(())
+}
+
+#[tauri::command]
+pub async fn try_delete_pack(filenames: Vec<String>) -> Result<(), String> {
+    let base_path = paths::minecraft_path(
+        Some(PathBuf::from("resourcepacks"))
+    );
+
+    // create a vector of paths
+    let paths: Vec<PathBuf> = filenames.iter().map(
+        |x| base_path.join(x)
+    ).collect();
+
+    // attempt to delete files
+    for path in paths.iter() {
+        match fs::remove_file(path) {
+            Ok(_) => {
+                println!("deleted {:?}", path);
+                return Ok(());
+            },
+            Err(e) => println!("couldnt delete {:?}: {}", path, e)
+        };
+    }
+
+    Err("no files deleted".to_owned())
 }

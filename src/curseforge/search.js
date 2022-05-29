@@ -14,6 +14,11 @@ export async function getVersions() {
     return versions;
 }
 
+/**
+ * It gets the files of a modpack from CurseForge
+ * @param id - The ID of the modpack
+ * @returns An array of objects.
+ */
 export async function getPackFiles(id) {
     let data = await getCurseForge(`/v1/mods/${id}/files`, {});
     data = data.data;
@@ -32,6 +37,21 @@ export async function getPackFiles(id) {
     }
 
     return objectToArr(versions);
+}
+
+/**
+ * It gets the filenames of all the files in a modpack
+ * @param id - The ID of the modpack.
+ * @returns An array of filenames.
+ */
+export async function getPackFilenames(id) {
+    let data = await getCurseForge(`/v1/mods/${id}/files`, {});
+    data = data.data;
+
+    let filenames = data.map(x => x.fileName);
+
+    // remove dupes
+    return [...new Set(filenames)];
 }
 
 function objectToArr(obj) {
@@ -97,7 +117,6 @@ export async function filterInstalled(packs) {
     );
 
     resp = resp.data;
-    console.log("response data", resp);
 
     // get filenames
     let filenames = {}
@@ -106,8 +125,6 @@ export async function filterInstalled(packs) {
         let mod = resp[modIndex];
         let name = mod.name;
         let files = [];
-
-        console.log("checking mod", mod);
 
         for (const fileIndex in mod.latestFilesIndexes) {
             let filename = mod.latestFilesIndexes[fileIndex].filename;
@@ -118,10 +135,7 @@ export async function filterInstalled(packs) {
         }
         
         filenames[name] = files;
-        console.log(`setting ${name} to ${filenames}`);
     }
-
-    console.log("filterInstalled filenames:", filenames);
 
     // check for each mod if its installed
     let installed = await invoke('get_installed_packs', {"packs": filenames})

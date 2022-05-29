@@ -13,6 +13,8 @@ import {
     getResourcePacks,
     filterInstalled,
     getPackFiles,
+    getPackFilenames,
+
 } from '../curseforge/search.js';
 
 import { 
@@ -349,6 +351,28 @@ export class SearchTab extends Component {
         }
     }
 
+    // try to delete a resource pack
+    tryDelete = async(packIndex) => {
+        let filenames = await getPackFilenames(
+            this.state.resourcePacks[packIndex].id
+        );
+
+        // send possible filenames to be deleted
+
+        await invoke("try_delete_pack", {
+            filenames: filenames
+        })
+        .then(async() => {
+            // set to uninstalled
+            await this.setState(state => {
+                state.resourcePacks[packIndex].installed = "uninstalled"
+            });
+            console.log("deleted");
+        }).catch((err) => console.error(err));
+        
+        this.forceUpdate();
+    }
+
     render() {
         const SearchBar = (
             <input
@@ -397,9 +421,12 @@ export class SearchTab extends Component {
                                         'packButton ' + (pack['installed'])
                                     }
                                     onClick={() => {
-                                        console.log("click registered")
-                                        if (pack['installed'] === "uninstalled") {
-                                            this.tryDownload(index)
+                                        console.log("click registered");
+                                        switch(pack['installed']) {
+                                            case "uninstalled":
+                                                this.tryDownload(index)
+                                            case "installed":
+                                                this.tryDelete(index)
                                         }
                                     }}
                                 ><span className='buttonText'></span></button>
