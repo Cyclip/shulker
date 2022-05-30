@@ -110,7 +110,7 @@
 }
 
 .resourcePacks {
-    height: calc(100% - 60px);
+    height: calc(100% - 80px);
     overflow-y: auto;
 }
 

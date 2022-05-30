@@ -7,13 +7,14 @@ import '../App.css';
 import './style.css';
 
 import {SearchTab} from './search.js';
+import {InstalledTab} from './installed.js';
 
 export default class ResourcesPage extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            activeTab: "search",
+            activeTab: "installed",
         };
     }
 
@@ -24,6 +25,14 @@ export default class ResourcesPage extends Component {
     }
 
     render() {
+        let tabDisplay;
+
+        if (this.state.activeTab === "search") {
+            tabDisplay = <SearchTab/>;
+        } else {
+            tabDisplay = <InstalledTab/>;
+        }
+
         return (
             <div className='page resources'>
                 <div className='tabs no-select'>
@@ -44,10 +53,7 @@ export default class ResourcesPage extends Component {
                 </div>
 
                 <div className='frame'>
-                    {
-                        this.state.activeTab === "search" &&
-                        <SearchTab/>
-                    }
+                    {tabDisplay}
                 </div>
             </div>
         )
