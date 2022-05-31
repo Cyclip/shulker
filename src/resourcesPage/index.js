@@ -30,7 +30,9 @@ export default class ResourcesPage extends Component {
         if (this.state.activeTab === "search") {
             tabDisplay = <SearchTab/>;
         } else {
-            tabDisplay = <InstalledTab/>;
+            tabDisplay = <InstalledTab
+                setTab={this.setTab}
+            />;
         }
 
         return (
