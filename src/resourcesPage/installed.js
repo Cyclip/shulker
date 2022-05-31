@@ -9,6 +9,7 @@ import LoadingSVG from '../loading.svg';
 
 import { 
     TrashIcon,
+    FolderOpenIcon,
  } from '@heroicons/react/solid'
 
 export class InstalledTab extends Component {
@@ -65,7 +66,7 @@ export class InstalledTab extends Component {
                             <div className='image'>
                                 {
                                     pack.tmpImagePath === ''
-                                    ? <img src="https://via.placeholder.com/96"></img>
+                                    ? <img src="https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/78/Unknown_pack.png/"></img>
                                     : <img src={pack.tmpImagePath}></img>
                                 }
                             </div>
@@ -74,9 +75,17 @@ export class InstalledTab extends Component {
                                 <h5 className='text desc'>{pack.desc}</h5>
                                 <h5 className='text filename'>{pack.filename}</h5>
                             </div>
-                            <button className='uninstall'>
-                                <TrashIcon className='icon'/>
-                            </button>
+                            <div className="buttons">
+                                <button className='openFolder'>
+                                    <FolderOpenIcon className='icon'/>
+                                    <h3 className='text'>Open</h3>
+                                </button>
+                                <button className='uninstall'>
+                                    <TrashIcon className='icon'/>
+                                    <h3 className='text'>Uninstall</h3>
+                                </button>
+                                
+                            </div>
                         </div>
                     ))
                 }
