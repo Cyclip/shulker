@@ -7,6 +7,10 @@ import '../App.css';
 import './installed.css';
 import LoadingSVG from '../loading.svg';
 
+import { 
+    TrashIcon,
+ } from '@heroicons/react/solid'
+
 export class InstalledTab extends Component {
     constructor(props) {
         super(props);
@@ -55,7 +59,27 @@ export class InstalledTab extends Component {
     render() {
         return (
             <div className='packContainer'>
-
+                {
+                    this.state.installedPacks.map((pack, index) => (
+                        <div className='pack'>
+                            <div className='image'>
+                                {
+                                    pack.tmpImagePath === ''
+                                    ? <img src="https://via.placeholder.com/96"></img>
+                                    : <img src={pack.tmpImagePath}></img>
+                                }
+                            </div>
+                            <div className='details'>
+                                <h3 className='text name'>{pack.name}</h3>
+                                <h5 className='text desc'>{pack.desc}</h5>
+                                <h5 className='text filename'>{pack.filename}</h5>
+                            </div>
+                            <button className='uninstall'>
+                                <TrashIcon className='icon'/>
+                            </button>
+                        </div>
+                    ))
+                }
             </div>
         );
     }
