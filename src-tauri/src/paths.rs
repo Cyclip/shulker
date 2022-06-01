@@ -5,7 +5,10 @@ use std::path::{
 
 use std::fs;
 
-use directories::BaseDirs;
+use directories::{
+    BaseDirs,
+    ProjectDirs,
+};
 
 /// Get .minecraft path
 /// Only supports default path
@@ -21,4 +24,20 @@ pub fn minecraft_path(extra: Option<PathBuf>) -> PathBuf {
     }
 
     Path::new("C:/").join(path)
+}
+
+/// Return cache directory with optional path parameter
+pub fn cache_path(extra: Option<PathBuf>) -> PathBuf {
+    let path = if let Some(proj_dirs) = ProjectDirs::from("com", "Cyclip", "shulker") {
+        let x = proj_dirs.cache_dir();
+        x.to_path_buf()
+    } else {
+        panic!("couldnt get project dirs");
+    };
+
+    if let Some(f) = extra {
+        PathBuf::from(path).join(f)
+    } else {
+        PathBuf::from(path)
+    }
 }

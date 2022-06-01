@@ -62,7 +62,7 @@ pub fn get_curseforge_api_key() -> String {
 
 #[tauri::command]
 pub fn get_installed_packs(packs: Value) -> Vec<String> {
-    packs::get_installed_packs(packs)
+    packs::search::get_installed_packs(packs)
 }
 
 #[tauri::command]
@@ -110,4 +110,20 @@ pub async fn try_delete_pack(filenames: Vec<String>) -> Result<(), String> {
     }
 
     Err("no files deleted".to_owned())
+}
+
+#[tauri::command]
+pub async fn get_all_installed_packs() -> Result<Vec<packs::installed::Pack>, String> {
+    let base_path = paths::minecraft_path(
+        Some(PathBuf::from("resourcepacks"))
+    );
+
+    let cache_path = paths::cache_path(
+        Some(PathBuf::from("packs/"))
+    );
+
+    packs::installed::get_installed_packs(
+        base_path,
+        cache_path,
+    )
 }

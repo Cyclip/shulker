@@ -7,6 +7,8 @@ extern crate serde;
 extern crate serde_json;
 extern crate directories;
 extern crate ureq;
+extern crate zip;
+extern crate sha1;
 
 mod paths;
 mod profiles;
@@ -42,6 +44,7 @@ fn main() {
             commands::get_installed_packs,
             commands::download_pack,
             commands::try_delete_pack,
+            commands::get_all_installed_packs,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -27,8 +27,9 @@ export class InstalledTab extends Component {
                     {
                         name: "coloured resource pack name",
                         desc: "pack description",
-                        filename: "path/to/pack.zip",
-                        tmpImagePath: "path/to/icon.png"
+                        filename: "pack.zip",
+                        path: "path/to/pack.zip",
+                        cached_img_path: "path/to/icon.png"
                     }
                 ]
 
@@ -45,21 +46,13 @@ export class InstalledTab extends Component {
 
     loadPacks = async() => {
         console.warn("no packs loaded");
-        
-        let sample = [];
-        for (let i = 0; i < 0; i++) {
-            sample.push({
-                name: `pack${i}`,
-                desc: "example desc",
-                filename: `pack${i}.zip`,
-                // empty => placeholder
-                tmpImagePath: ``,
+        invoke("get_all_installed_packs")
+        .then((r) => {
+            this.setState({
+                installedPacks: r
             });
-        }
-
-        this.setState({
-            installedPacks: sample
-        }, () => console.log(this.state));
+        })
+        .catch((err) => console.error("get_all_installed_packs", err));
     }
 
     render() {
@@ -67,9 +60,9 @@ export class InstalledTab extends Component {
             <div className='pack'>
                 <div className='image'>
                     {
-                        pack.tmpImagePath === ''
+                        pack.cached_img_path === ''
                         ? <img src="https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/78/Unknown_pack.png/"></img>
-                        : <img src={pack.tmpImagePath}></img>
+                        : <img src={pack.cached_img_path}></img>
                     }
                 </div>
                 <div className='details'>
