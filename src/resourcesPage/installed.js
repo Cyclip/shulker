@@ -5,7 +5,9 @@ import '../fonts.css';
 import '../animations.css';
 import '../App.css';
 import './installed.css';
+import '../colouring.css';
 import LoadingSVG from '../loading.svg';
+import { ColouredString } from '../colouring';
 
 import { 
     TrashIcon,
@@ -66,8 +68,8 @@ export class InstalledTab extends Component {
                     }
                 </div>
                 <div className='details'>
-                    <h3 className='text name'>{pack.name}</h3>
-                    <h5 className='text desc'>{pack.desc}</h5>
+                    <h3 className='text name'>{new ColouredString(pack.name).toHtml()}</h3>
+                    <h5 className='text desc'>{new ColouredString(pack.desc).toHtml()}</h5>
                     <h5 className='text filename'>{pack.filename}</h5>
                 </div>
                 <div className="buttons">

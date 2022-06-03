@@ -1,0 +1,87 @@
+/* no val */
+.coloured span {
+    color: white;
+    text-decoration: none;
+    font-weight: lighter;
+    font-style: normal;
+}
+
+.coloured span.black {
+    color: #313131;
+}
+
+.coloured span.dark_blue {
+    color: #0000AA;
+}
+
+.coloured span.dark_green {
+    color: #00AA00;
+}
+
+.coloured span.dark_aqua {
+    color: #00AAAA;
+}
+
+.coloured span.dark_red {
+    color: #AA0000;
+}
+
+.coloured span.dark_purple {
+    color: #AA00AA;
+}
+
+.coloured span.gold {
+    color: #FFAA00;
+}
+
+.coloured span.gray {
+    color: #AAAAAA;
+}
+
+.coloured span.dark_gray {
+    color: #555555;
+}
+
+.coloured span.blue {
+    color: #5555FF;
+}
+
+.coloured span.green {
+    color: #55FF55;
+}
+
+.coloured span.aqua {
+    color: #55FFFF;
+}
+
+.coloured span.red {
+    color: #FF5555;
+}
+
+.coloured span.light_purple {
+    color: #FF55FF;
+}
+
+.coloured span.yellow {
+    color: #FFFF55;
+}
+
+.coloured span.white {
+    color: white;
+}
+
+.coloured span.bold {
+    font-weight: bold;
+}
+
+.coloured span.italic {
+    font-style: italic;
+}
+
+.coloured span.underline {
+    text-decoration: underline;
+}
+
+.coloured span.strikethrough {
+    text-decoration: line-through;
+}
