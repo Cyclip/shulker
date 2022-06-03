@@ -67,7 +67,7 @@ export class Section {
 
 export class ColouredString {
     constructor(string) {
-        let active = DEFAULT_ACTIVE;
+        let active = Object.assign({}, DEFAULT_ACTIVE);
         let newSection = true;
         this.sections = [];
         

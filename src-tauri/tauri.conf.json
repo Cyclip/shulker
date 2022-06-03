@@ -56,6 +56,10 @@
           "assetScope": {
               "allow": ["*"]
           }
+      },
+      "fs": {
+          "removeFile": true,
+          "scope": ["*"]
       }
     },
     "windows": [

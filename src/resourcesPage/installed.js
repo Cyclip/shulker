@@ -1,4 +1,5 @@
 import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
+import { removeFile } from '@tauri-apps/api/fs';
 import React, { Component } from 'react';
 import '../scrollbar.css';
 import '../fonts.css';
@@ -53,8 +54,24 @@ export class InstalledTab extends Component {
             this.setState({
                 installedPacks: r
             });
+            console.log("packs", r);
         })
         .catch((err) => console.error("get_all_installed_packs", err));
+    }
+
+    openFolder = (filepath) => {
+        console.log("opening", filepath);
+        invoke("open_file_in_explorer", {
+            path: filepath.replace("/", "\\"),
+        });
+    }
+
+    uninstall = (filepath) => {
+        removeFile(filepath)
+        .then(() => {
+            this.loadPacks();
+        })
+        .catch((err) => console.error(err))
     }
 
     render() {
@@ -73,11 +90,11 @@ export class InstalledTab extends Component {
                     <h5 className='text filename'>{pack.filename}</h5>
                 </div>
                 <div className="buttons">
-                    <button className='openFolder'>
+                    <button className='openFolder' onClick={() => {this.openFolder(pack.path)}}>
                         <FolderOpenIcon className='icon'/>
                         <h3 className='text'>Open</h3>
                     </button>
-                    <button className='uninstall'>
+                    <button className='uninstall' onClick={() => {this.uninstall(pack.path)}}>
                         <TrashIcon className='icon'/>
                         <h3 className='text'>Uninstall</h3>
                     </button>

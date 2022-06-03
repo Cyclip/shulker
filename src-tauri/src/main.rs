@@ -45,6 +45,7 @@ fn main() {
             commands::download_pack,
             commands::try_delete_pack,
             commands::get_all_installed_packs,
+            commands::open_file_in_explorer,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

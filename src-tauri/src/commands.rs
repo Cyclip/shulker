@@ -16,6 +16,7 @@ use serde_json::{
 
 use std::path::PathBuf;
 use std::fs;
+use std::process::Command;
 
 /// Get all basic visible information on profiles
 #[tauri::command]
@@ -126,4 +127,12 @@ pub async fn get_all_installed_packs() -> Result<Vec<packs::installed::Pack>, St
         base_path,
         cache_path,
     )
+}
+
+#[tauri::command]
+pub async fn open_file_in_explorer(path: String) {
+    Command::new("explorer")
+        .args(["/select,", &path])
+        .spawn()
+        .unwrap();
 }
