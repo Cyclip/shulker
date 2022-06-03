@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/tauri'
+import { invoke, convertFileSrc } from '@tauri-apps/api/tauri'
 import React, { Component } from 'react';
 import '../scrollbar.css';
 import '../fonts.css';
@@ -57,12 +57,12 @@ export class InstalledTab extends Component {
 
     render() {
         const packList = this.state.installedPacks.map((pack, index) => (
-            <div className='pack'>
+            <div className='pack' key={pack.name}>
                 <div className='image'>
                     {
                         pack.cached_img_path === ''
                         ? <img src="https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/78/Unknown_pack.png/"></img>
-                        : <img src={pack.cached_img_path}></img>
+                        : <img src={convertFileSrc(pack.cached_img_path)}></img>
                     }
                 </div>
                 <div className='details'>

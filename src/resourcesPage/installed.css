@@ -37,9 +37,8 @@
 }
 
 .packContainer .pack .image img {
-    max-height: 96px;
-    height: auto;
-    width: auto;
+    width: 96px;
+    height: 96px;
 }
 
 .packContainer .pack .details {
