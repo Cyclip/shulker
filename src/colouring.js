@@ -61,7 +61,9 @@ export class Section {
                 return "white"
         }
 
-        throw "Invalid colour code";
+        // throw "Invalid colour code";
+        console.error("Invalid colour code", this.details.color);
+        return "white"; // default
     }
 }
 

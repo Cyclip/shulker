@@ -17,6 +17,7 @@ import {
 // pages
 import VersionsPage from './versionsPage/index.js';
 import ResourcesPage from './resourcesPage/index.js';
+import AddonsPage from './addonsPage/index.js';
 
 class App extends Component {
     constructor(props) {
@@ -24,7 +25,7 @@ class App extends Component {
 
         this.state = {
             // current page opened
-            page: "main",
+            page: "addons",
         };
     }
 
@@ -84,7 +85,7 @@ class App extends Component {
                                 Customise textures and manage shaders
                             </h6>
                         </div>
-                        <div className="panel">
+                        <div className="panel" onClick={() => this.openSetting("addons")}>
                             <CodeIcon className="panelIcon inverted"></CodeIcon>
                             <h2 className="text">
                                 Addons
@@ -102,9 +103,14 @@ class App extends Component {
                 <VersionsPage/>
             }
 
-            {
+{
                 this.state.page === "resources" &&
                 <ResourcesPage/>
+            }
+
+            {
+                this.state.page === "addons" &&
+                <AddonsPage/>
             }
         </div>
       ;
