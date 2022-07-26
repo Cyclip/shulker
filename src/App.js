@@ -24,7 +24,7 @@ class App extends Component {
 
         this.state = {
             // current page opened
-            page: "resources",
+            page: "main",
         };
     }
 
